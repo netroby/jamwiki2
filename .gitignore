@@ -1,1 +1,3 @@
 target/
+.projectKnowledge/
+nb-configuration.xml
