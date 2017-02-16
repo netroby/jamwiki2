@@ -6,6 +6,6 @@
 * [[Special:SpecialPages|特殊頁面]]
 * [[Special:Upload|檔案上傳]]
 ----
-* [http://jamwiki.org/ JAMWiki]
-* [http://sourceforge.net/projects/jamwiki/ SourceForge 專案]
-* [http://mediawiki.org/ MediaWiki]
+* [http://jamwiki.org/ JAMWiki.org]
+* [https://github.com/km-works/jamwiki2 JamWiki2 @GitHub]
+* [https://www.mediawiki.org/wiki/Help:Contents MediaWiki Help]

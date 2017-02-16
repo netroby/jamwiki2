@@ -6,6 +6,6 @@
 * [[Special:SpecialPages|Speciális lapok]]
 * [[Special:Upload|Fájl feltöltése]]
 ----
-* [http://jamwiki.org/ JAMWiki]
-* [http://sourceforge.net/projects/jamwiki/ Sourceforge oldal]
-* [http://mediawiki.org/ MediaWiki]
+* [http://jamwiki.org/ JAMWiki.org]
+* [https://github.com/km-works/jamwiki2 JamWiki2 @GitHub]
+* [https://www.mediawiki.org/wiki/Help:Contents MediaWiki Help]

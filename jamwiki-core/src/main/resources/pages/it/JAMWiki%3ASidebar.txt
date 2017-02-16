@@ -6,7 +6,7 @@
 * [[Special:SpecialPages|Pagine speciali]]
 * [[Special:Upload|Carica archivio]]
 ----
-* [http://jamwiki.org/ JAMWiki]
-* [http://sourceforge.net/projects/jamwiki/ Pagina SourceForge]
-* [http://mediawiki.org/ MediaWiki]
+* [http://jamwiki.org/ JAMWiki.org]
+* [https://github.com/km-works/jamwiki2 JamWiki2 @GitHub]
+* [https://www.mediawiki.org/wiki/Help:Contents MediaWiki Help]
 
