@@ -53,7 +53,7 @@ public class SetupServlet extends JAMWikiServlet {
 	private static final WikiLogger logger = WikiLogger.getLogger(SetupServlet.class.getName());
 	/** The name of the JSP file used to render the servlet output. */
 	protected static final String JSP_SETUP = "setup.jsp";
-	private static final JavaVersion MINIMUM_JDK_VERSION = JavaVersion.JAVA_1_5;
+	private static final JavaVersion MINIMUM_JDK_VERSION = JavaVersion.JAVA_1_7;
 
 	/**
 	 * This servlet requires slightly different initialization parameters from most

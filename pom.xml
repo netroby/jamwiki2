@@ -5,7 +5,7 @@
 	<artifactId>jamwiki</artifactId>
 	<packaging>pom</packaging>
 	<version>2.0-SNAPSHOT</version>
-	<name>JAMWiki Super POM</name>
+	<name>JAMWiki Parent</name>
 	<description>
 		JAMWiki is a Java-based Wiki engine which offers many of the
 		features of MediaWiki.
@@ -41,6 +41,8 @@
 		<dependency.spring.security.version>3.1.3.RELEASE</dependency.spring.security.version><!-- 3.2.10.RELEASE -->
 		<lucene.version>4.1.0</lucene.version>
 		<slf4j.version>1.7.2</slf4j.version>
+	 <maven.compiler.source>1.7</maven.compiler.source>
+	 <maven.compiler.target>1.7</maven.compiler.target>
 	</properties>
 	<prerequisites>
 		<maven>${maven.version}</maven>
