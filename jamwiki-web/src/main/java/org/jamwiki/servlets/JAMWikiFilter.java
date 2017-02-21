@@ -122,6 +122,7 @@ public class JAMWikiFilter implements Filter {
 		if (!WikiUtil.isFirstUse()) {
 			return false;
 		}
+        //assert(WikiUtil.isFirstUse())
 		if (this.isIgnoreableFile(request)) {
 			return false;
 		}

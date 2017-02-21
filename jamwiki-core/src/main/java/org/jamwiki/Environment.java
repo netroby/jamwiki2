@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-// FIXME - remove this import
-import org.apache.commons.pool.impl.GenericObjectPool;
 import org.jamwiki.db.QueryHandler;
 import org.jamwiki.utils.ResourceUtil;
 import org.jamwiki.utils.SortedProperties;
@@ -37,7 +35,7 @@ import org.jamwiki.utils.WikiLogger;
  * provides access to JAMWiki property values stored in the
  * <code>jamwiki.properties</code> file.
  */
-public class Environment {
+public final class Environment {
 	private static final WikiLogger logger = WikiLogger.getLogger(Environment.class.getName());
 
 	public static final String PROP_BASE_COOKIE_EXPIRE = "cookie-expire";
@@ -206,7 +204,7 @@ public class Environment {
 			return file; //NOPMD
 		}
 		// search for file in class loader path
-		return Environment.retrievePropertyFile(filename);
+		return retrievePropertyFile(filename);
 	}
 
 	/**
@@ -238,7 +236,7 @@ public class Environment {
 		this.defaults.setProperty(PROP_DBCP_TEST_ON_RETURN, Boolean.FALSE.toString());
 		this.defaults.setProperty(PROP_DBCP_TEST_WHILE_IDLE, Boolean.FALSE.toString());
 		this.defaults.setProperty(PROP_DBCP_TIME_BETWEEN_EVICTION_RUNS, "120");
-		this.defaults.setProperty(PROP_DBCP_WHEN_EXHAUSTED_ACTION, String.valueOf(GenericObjectPool.WHEN_EXHAUSTED_GROW));
+		this.defaults.setProperty(PROP_DBCP_WHEN_EXHAUSTED_ACTION, String.valueOf(0));  //org.apache.commons.pool.impl.GenericObjectPool.WHEN_EXHAUSTED_GROW
 		this.defaults.setProperty(PROP_EMAIL_SMTP_ENABLE,Boolean.FALSE.toString());
 		this.defaults.setProperty(PROP_EMAIL_SMTP_REQUIRES_AUTH,Boolean.FALSE.toString());
 		this.defaults.setProperty(PROP_EMAIL_SMTP_USERNAME,"");
@@ -398,7 +396,7 @@ public class Environment {
 	 * <code>false</code> otherwise.
 	 */
 	public static boolean isInitialized() {
-		return Environment.getBooleanValue(Environment.PROP_BASE_INITIALIZED);
+		return getBooleanValue(Environment.PROP_BASE_INITIALIZED);
 	}
 
 	/**
@@ -489,7 +487,7 @@ public class Environment {
 	 */
 	public static void saveConfiguration() throws WikiException {
 		try {
-			Environment.saveProperties(PROPERTY_FILE_NAME, getInstance(), null);
+			saveProperties(PROPERTY_FILE_NAME, getInstance(), null);
 			// do not use WikiBase.getDataHandler() directly since properties are
 			// being changed
 			WikiBase.getDataHandler().writeConfiguration(propertiesToMap(getInstance()));
