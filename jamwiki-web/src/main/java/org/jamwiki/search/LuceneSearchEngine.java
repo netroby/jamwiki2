@@ -142,6 +142,7 @@ public class LuceneSearchEngine implements SearchEngine {
 	 * @param virtualWiki The virtual wiki for which pending updates are being
 	 *  committed.
 	 */
+    @Override
 	public void commit(String virtualWiki) {
 		try {
 			this.commit(this.retrieveIndexWriter(virtualWiki, false), true);
@@ -164,7 +165,8 @@ public class LuceneSearchEngine implements SearchEngine {
 	 * Given the search text, searcher object, and query analyzer generate an
 	 * appropriate Lucene search query.
 	 */
-	protected Query createSearchQuery(IndexSearcher searcher, StandardAnalyzer analyzer, String text, List<Integer> namespaces) throws IOException, ParseException {
+	protected Query createSearchQuery(IndexSearcher searcher, StandardAnalyzer analyzer, String text, List<Integer> namespaces) 
+            throws IOException, ParseException {
 		BooleanQuery fullQuery = new BooleanQuery();
 		QueryParser qp;
 		// build the namespace portion the query
@@ -263,9 +265,10 @@ public class LuceneSearchEngine implements SearchEngine {
 	 * @return A list of SearchResultEntry objects for all documents that
 	 *  contain the search term.
 	 */
+    @Override
 	public List<SearchResultEntry> findResults(String virtualWiki, String text, List<Integer> namespaces) {
 		StandardAnalyzer analyzer = new StandardAnalyzer(USE_LUCENE_VERSION);
-		List<SearchResultEntry> results = new ArrayList<SearchResultEntry>();
+		List<SearchResultEntry> results = new ArrayList<>();
 		if (logger.isTraceEnabled()) {
 			logger.trace("search text: " + text);
 		}
@@ -275,16 +278,19 @@ public class LuceneSearchEngine implements SearchEngine {
 			// actually perform the search
 			TopScoreDocCollector collector = TopScoreDocCollector.create(MAXIMUM_RESULTS_PER_SEARCH, true);
 			searcher.search(query, collector);
-			Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<span class=\"highlight\">", "</span>"), new SimpleHTMLEncoder(), new QueryScorer(query, FIELD_TOPIC_CONTENT));
+			Highlighter highlighter = new Highlighter(
+                    new SimpleHTMLFormatter("<span class=\"highlight\">", "</span>"), 
+                    new SimpleHTMLEncoder(), 
+                    new QueryScorer(query, FIELD_TOPIC_CONTENT));
 			ScoreDoc[] hits = collector.topDocs().scoreDocs;
-			for (int i = 0; i < hits.length; i++) {
-				int docId = hits[i].doc;
-				Document doc = searcher.doc(docId);
-				String summary = retrieveResultSummary(doc, highlighter, analyzer);
-				SearchResultEntry result = new SearchResultEntry(doc.get(FIELD_TOPIC_NAME), hits[i].score, summary);
-				results.add(result);
-			}
-		} catch (Exception e) {
+            for (ScoreDoc hit : hits) {
+                int docId = hit.doc;
+                Document doc = searcher.doc(docId);
+                String summary = retrieveResultSummary(doc, highlighter, analyzer);
+                SearchResultEntry result = new SearchResultEntry(doc.get(FIELD_TOPIC_NAME), hit.score, summary);
+                results.add(result);
+            }
+		} catch (IOException | ParseException | InvalidTokenOffsetsException e) {
 			logger.error("Exception while searching for " + text, e);
 		}
 		return results;

@@ -41,6 +41,7 @@ public class StylesheetServlet extends JAMWikiServlet {
 	/**
 	 *
 	 */
+    @Override
 	public ModelAndView handleJAMWikiRequest(HttpServletRequest request, HttpServletResponse response, ModelAndView next, WikiPageInfo pageInfo) throws Exception {
 		String virtualWiki = pageInfo.getVirtualWikiName();
 		String stylesheet = ServletUtil.cachedContent(request.getContextPath(), request.getLocale(), virtualWiki, WikiBase.SPECIAL_PAGE_SYSTEM_CSS, false);
@@ -50,9 +51,9 @@ public class StylesheetServlet extends JAMWikiServlet {
 		// cache for 30 minutes (60 * 30 = 1800)
 		// FIXME - make configurable
 		response.setHeader("Cache-Control", "max-age=1800");
-		PrintWriter out = response.getWriter();
-		out.print(stylesheet);
-		out.close();
+        try (PrintWriter out = response.getWriter()) {
+            out.print(stylesheet);
+        }
 		// do not load defaults or redirect - return as raw CSS
 		return null;
 	}

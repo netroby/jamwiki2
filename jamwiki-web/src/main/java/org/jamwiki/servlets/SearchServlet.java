@@ -88,8 +88,8 @@ public class SearchServlet extends JAMWikiServlet {
 		next.addObject("namespaces", namespaceMap);
 		List<Integer> selectedNamespaces = null;
 		if (request.getParameter("ns") != null) {
-			Map<Integer, Integer> selectedNamespaceMap = new TreeMap<Integer, Integer>();
-			selectedNamespaces = new ArrayList<Integer>();
+			Map<Integer, Integer> selectedNamespaceMap = new TreeMap<>();
+			selectedNamespaces = new ArrayList<>();
 			for (String namespaceId : request.getParameterValues("ns")) {
 				selectedNamespaces.add(NumberUtils.toInt(namespaceId));
 				selectedNamespaceMap.put(NumberUtils.toInt(namespaceId), NumberUtils.toInt(namespaceId));

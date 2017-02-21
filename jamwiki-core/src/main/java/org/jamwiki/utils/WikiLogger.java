@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class provides a wrapper around the <a href="http://www.slf4j.org">SFL4J</a>
- * logging facade framework. A logging framework can be chosen at runtime.
+ * logging facade framework. A logging framework implementation will be chosen at runtime.
  */
 public class WikiLogger {
 
