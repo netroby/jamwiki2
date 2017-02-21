@@ -1,3 +1,6 @@
 target/
 .projectKnowledge/
 nb-configuration.xml
+nbactions.xml
+*.bat
+
