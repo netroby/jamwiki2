@@ -19,23 +19,26 @@
 <%@ page errorPage="/WEB-INF/jsp/error.jsp"
     contentType="text/html; charset=utf-8"
     trimDirectiveWhitespaces="true"
+    import="java.net.URI"
 %>
 
 <%@ include file="page-init.jsp" %>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<%
+    final URI logoURI = new URI((String)request.getAttribute("logo"));
+    String logoSrc = logoURI.toString();
+    if (!logoURI.isAbsolute()) {
+        logoSrc = "/images" + (logoSrc.startsWith("/") ? "" : "/") + logoSrc;
+    }
+%>
+<!DOCTYPE html>
+<html>
 <%@ include file="head.jsp" %>
-
 <body>
-
 <div id="wiki-page">
 <c:if test="${!upgradeInProgress}">
 <div id="wiki-navigation">
 	<div id="logo">
-	<%-- FIXME - need image width and height --%>
-	<a class="logo" href="<jamwiki:link value="${defaultTopic}" />"><img border="0" src="<c:url value="/images/${logo}" />" alt="" /></a>
+    <a class="logo" href="<jamwiki:link value="${defaultTopic}" />"><img src="<%= logoSrc %>" width="180px" alt="" /></a>
 	</div>
 	<br />
 	<c:if test="${!empty leftMenu && leftMenu != '<br/><br/>'}">
@@ -88,7 +91,7 @@
 </div>
 <div id="wiki-footer">
 	<div id="footer-custom"><c:out value="${footer}" escapeXml="false" /></div>
-	<div id="footer-logo"><a href="http://jamwiki.org/">JAMWiki</a> <fmt:message key="footer.message.version" /> <jamwiki:wiki-version/></div>
+	<div id="footer-logo"><a href="https://github.com/km-works/jamwiki2/">JAMWiki2</a> <fmt:message key="footer.message.version" /> <jamwiki:wiki-version/></div>
 </div>
 </div>
 
