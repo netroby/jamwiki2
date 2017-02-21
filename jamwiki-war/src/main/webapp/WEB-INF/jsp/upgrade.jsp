@@ -22,8 +22,8 @@
 
 <%@ include file="page-init.jsp" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 	<title><jamwiki_t:wikiMessage message="${pageInfo.pageTitle}" /></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -34,7 +34,7 @@ body {
 	padding: 5px;
 }
 body, input, select {
-	font: 95% sans-serif, tahoma;
+	font: 100% Roboto, sans-serif;
 }
 #upgrade-container {
 	margin: 20px auto;

@@ -26,8 +26,8 @@
 
 <%@ include file="page-init.jsp" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 	<title><jamwiki_t:wikiMessage message="${pageInfo.pageTitle}" /></title>
 <style>
@@ -37,7 +37,7 @@ body {
 	padding: 5px;
 }
 body, input, select {
-	font: 95% sans-serif, tahoma;
+	font: 100% Roboto, sans-serif;
 }
 #setup-container {
 	padding: 10px;
@@ -188,7 +188,7 @@ body, input, select {
 		<div class="formelement"><input type="password" name="confirmPassword" value="<c:out value="${confirmPassword}" />" id="setupConfirmPassword" /></div>
 	</div>
 	<div class="message"><jamwiki_t:wikiMessage message="${logMessage}" /></div>
-	<div align="center"><input type="submit" name="function" value="<fmt:message key="admin.action.save" />" /></div>
+	<div><input type="submit" name="function" value="<fmt:message key="admin.action.save" />" /></div>
 	</form>
 	<c:if test="${!empty messages}">
 		<div class="message">

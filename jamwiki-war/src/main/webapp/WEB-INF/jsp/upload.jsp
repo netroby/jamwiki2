@@ -27,7 +27,7 @@
 </c:if>
 
 <form name="form1" method="post" action="<jamwiki:link value="Special:Upload" />" enctype="multipart/form-data">
-<table border="0">
+<table>
 <tr>
 	<td><label for="uploadSource"><fmt:message key="upload.caption.source" /></label>:</td>
 	<td><input type="file" name="contents" size="50" id="uploadSource" /></td>

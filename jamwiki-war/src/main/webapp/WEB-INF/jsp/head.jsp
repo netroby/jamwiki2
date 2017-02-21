@@ -19,7 +19,7 @@
 
 <head>
 	<title><jamwiki_t:wikiMessage message="${pageInfo.pageTitle}" /> - ${pageInfo.siteName}</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="DC.Title" content="<jamwiki_t:wikiMessage message="${pageInfo.pageTitle}" /> - <c:out value="${pageInfo.siteName}" />" />
 <c:if test="${!empty pageInfo.metaDescription}">
 	<meta name="description" content="<c:out value="${pageInfo.metaDescription}" />" />
@@ -42,6 +42,8 @@
 	<link rel="alternate" type="application/rss+xml" title="<c:out value="${pageInfo.RSSTitle}" /> (<c:out value="${virtualWiki}"/>): <fmt:message key="recentchanges.rss.feed3" />" href="<jamwiki:link value="Special:RecentChangesFeed?linkToVersion=true"/>" />
 	<link rel="alternate" type="application/rss+xml" title="<c:out value="${pageInfo.RSSTitle}" /> (<c:out value="${virtualWiki}"/>): <fmt:message key="recentchanges.rss.feed4" />" href="<jamwiki:link value="Special:RecentChangesFeed?minorEdits=true&amp;linkToVersion=true"/>" />
 </jamwiki:enabled>
+    <link href='//fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 	<link href="<jamwiki:link value="jamwiki.css?${cssRevision}" />" type="text/css" rel="stylesheet" />
 	<script type="text/javascript" src="<c:url value="/js/jamwiki.js?${jsRevision}" />"></script>
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </head>

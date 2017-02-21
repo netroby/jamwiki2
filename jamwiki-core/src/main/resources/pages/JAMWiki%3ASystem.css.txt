@@ -5,7 +5,7 @@ body {
 	padding: 0;
 }
 body, input, select {
-	font: 95% sans-serif, tahoma;
+	font: 100% Roboto,sans-serif;
 }
 a {
 	text-decoration: none;
@@ -171,7 +171,7 @@ div.submenu {
 #wiki-content {
 	position: relative;
 	margin-left: 185px;
-	font-size: 80%;
+	font-size: 90%;
 	vertical-align: top;
 }
 #wiki-footer {
