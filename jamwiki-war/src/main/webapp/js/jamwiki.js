@@ -16,9 +16,9 @@ if (!Function.bind) {
 JAMWiki.Editor = function() {
 	var alertText;
 	var clientPC = navigator.userAgent.toLowerCase(); // Get client info
-	var is_gecko = ((clientPC.indexOf('gecko')!=-1) && (clientPC.indexOf('spoofer')==-1)
-					&& (clientPC.indexOf('khtml') == -1) && (clientPC.indexOf('netscape/7.0')==-1));
-	var is_safari = ((clientPC.indexOf('AppleWebKit')!=-1) && (clientPC.indexOf('spoofer')==-1));
+	var is_gecko = ((clientPC.indexOf('gecko')!==-1) && (clientPC.indexOf('spoofer')===-1)
+					&& (clientPC.indexOf('khtml') === -1) && (clientPC.indexOf('netscape/7.0')===-1));
+	var is_safari = ((clientPC.indexOf('AppleWebKit')!==-1) && (clientPC.indexOf('spoofer')===-1));
 	var noOverwrite = false;
 	function escapeQuotes(text) {
 		var re = new RegExp("'","g");
@@ -41,7 +41,7 @@ JAMWiki.Editor = function() {
 				theSelection=sampleText;
 			}
 			txtarea.focus();
-			if (theSelection.charAt(theSelection.length - 1) == " ") {
+			if (theSelection.charAt(theSelection.length - 1) === " ") {
 				// exclude ending space char, if any
 				theSelection = theSelection.substring(0, theSelection.length - 1);
 				document.selection.createRange().text = tagOpen + theSelection + tagClose + " ";
@@ -49,7 +49,7 @@ JAMWiki.Editor = function() {
 				document.selection.createRange().text = tagOpen + theSelection + tagClose;
 			}
 		// Mozilla
-		} else if (txtarea.selectionStart || txtarea.selectionStart == '0') {
+		} else if (txtarea.selectionStart || txtarea.selectionStart === '0') {
 			var startPos = txtarea.selectionStart;
 			var endPos = txtarea.selectionEnd;
 			var scrollTop = txtarea.scrollTop;
@@ -57,7 +57,7 @@ JAMWiki.Editor = function() {
 			if (!myText) {
 				myText = sampleText;
 			}
-			if (myText.charAt(myText.length - 1) == " ") {
+			if (myText.charAt(myText.length - 1) === " ") {
 				// exclude ending space char, if any
 				subst = tagOpen + myText.substring(0, (myText.length - 1)) + tagClose + " ";
 			} else {
@@ -114,7 +114,7 @@ JAMWiki.Editor = function() {
 }();
 JAMWiki.UI = function() {
 	function toggleToc(toggleLink, toggleTarget, hideLabel, showLabel) {
-		if (toggleLink.innerHTML == hideLabel) {
+		if (toggleLink.innerHTML === hideLabel) {
 			toggleLink.innerHTML = showLabel;
 			JAMWiki.UI.addClass(toggleTarget, "hidden");
 		} else {
@@ -138,7 +138,7 @@ JAMWiki.UI = function() {
 		hasClass: function(element, cssClassName) {
 			var classNames = element.className.split(" ");
 			for (var i=0; i < classNames.length; i++) {
-				if (classNames[i] == cssClassName) {
+				if (classNames[i] === cssClassName) {
 					return true;
 				}
 			}
@@ -149,7 +149,7 @@ JAMWiki.UI = function() {
 			var classNames = element.className.split(" ");
 			var updatedClassNames = "";
 			for (var i=0; i < classNames.length; i++) {
-				if (classNames[i] == cssClassName) {
+				if (classNames[i] === cssClassName) {
 					continue;
 				}
 				if (updatedClassNames.length > 0) {
@@ -175,7 +175,7 @@ JAMWiki.UI = function() {
 			var siblings = document.getElementsByName(siblingName);
 			for (var i = 0; i < siblings.length; i++) {
 				// make sure the element is a radio button, if not skip it
-				if (siblings[i].type != 'radio') {
+				if (siblings[i].type !== 'radio') {
 					continue;
 				}
 				// now make the button visible or hidden as appropriate
@@ -197,7 +197,7 @@ JAMWiki.UI = function() {
 		// toggle the show/hide link in the TOC header
 		initializeTocToggle: function(hideLabel, showLabel) {
 			var toggleLink = document.getElementById("toggle-link");
-			var toggleTarget = document.getElementById("toc-content")
+			var toggleTarget = document.getElementById("toc-content");
 			toggleLink.onclick = toggleToc.bind(this, toggleLink, toggleTarget, hideLabel, showLabel);
 		}
 	};
@@ -210,7 +210,7 @@ JAMWiki.Tabs = function() {
 		var tabLink = getFirstChildWithTagName(this, 'A');
 		var selectedId = getHash(tabLink.getAttribute('href'));
 		for (var id in contentDivs) {
-			if (id == selectedId) {
+			if (id === selectedId) {
 				tabLinks[id].className = 'active';
 				contentDivs[id].className = 'submenu-tab-item';
 			} else {
@@ -222,7 +222,7 @@ JAMWiki.Tabs = function() {
 	}
 	function getFirstChildWithTagName(element, tagName) {
 		for (var i = 0; i < element.childNodes.length; i++) {
-			if (element.childNodes[i].nodeName == tagName) {
+			if (element.childNodes[i].nodeName === tagName) {
 				return element.childNodes[i];
 			}
 		}
@@ -239,7 +239,7 @@ JAMWiki.Tabs = function() {
 			}
 			var tabListItems = tabNode.childNodes;
 			for (var i = 0; i < tabListItems.length; i++) {
-				if (tabListItems[i].nodeName == "LI") {
+				if (tabListItems[i].nodeName === "LI") {
 					var tabLink = getFirstChildWithTagName(tabListItems[i], 'A');
 					var id = getHash(tabLink.getAttribute('href'));
 					tabLinks[id] = tabListItems[i];
@@ -255,7 +255,7 @@ JAMWiki.Tabs = function() {
 					// blur focus to avoid a link box around the text
 					this.blur();
 				};
-				if (document.location.hash == '#' + id || i == 0) {
+				if (document.location.hash === '#' + id || i === 0) {
 					selectedId = id;
 				}
 				i++;
@@ -263,7 +263,7 @@ JAMWiki.Tabs = function() {
 			tabLinks[selectedId].className = 'active';
 			var i = 0;
 			for (var id in contentDivs) {
-				if (id != selectedId) {
+				if (id !== selectedId) {
 					contentDivs[id].className = 'submenu-tab-item hidden';
 				}
 				i++;
@@ -286,7 +286,7 @@ JAMWiki.Admin = function() {
 		}
 	}
 	function toggleDisableOnChange(selectElement, enableValue, idElements, containerElement, expandedClass) {
-		var disabled = (selectElement.options[selectElement.selectedIndex].value != enableValue);
+		var disabled = (selectElement.options[selectElement.selectedIndex].value !== enableValue);
 		for (var i = 0; i < idElements.length; i++) {
 			var disableElement = document.getElementById(idElements[i]);
 			if (disableElement) {
@@ -333,4 +333,4 @@ JAMWiki.Admin = function() {
 window.onload = function() {
 	JAMWiki.Tabs.initializeTabs();
 	JAMWiki.Admin.initializeVirtualWikiCheckboxes();
-}
+};
