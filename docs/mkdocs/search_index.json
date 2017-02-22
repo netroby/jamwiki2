@@ -1,0 +1,39 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "Welcome to JamWiki2\n\u00b6",
+            "title": "Overview"
+        },
+        {
+            "location": "/#welcome-to-jamwiki2",
+            "text": "",
+            "title": "Welcome to JamWiki2"
+        },
+        {
+            "location": "/about/",
+            "text": "About: JamWiki2\n\u00b6\n\n\nHistory\n\u00b6\n\n\nCurrent State\n\u00b6\n\n\nRoadmap\n\u00b6",
+            "title": "About"
+        },
+        {
+            "location": "/about/#about-jamwiki2",
+            "text": "",
+            "title": "About: JamWiki2"
+        },
+        {
+            "location": "/about/#history",
+            "text": "",
+            "title": "History"
+        },
+        {
+            "location": "/about/#current-state",
+            "text": "",
+            "title": "Current State"
+        },
+        {
+            "location": "/about/#roadmap",
+            "text": "",
+            "title": "Roadmap"
+        }
+    ]
+}

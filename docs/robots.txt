@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://km-works.github.io/jamwiki2/sitemap.xml

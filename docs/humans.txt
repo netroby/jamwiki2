@@ -1,0 +1,13 @@
+/* humans responsible for this web site (see: humanstxt.org) */
+
+/* TEAM */
+  Webmaster: Christian P. Lerch
+  Contact: webmaster [at] km-works.eu
+  Location: Vienna, Austria
+
+/* THANKS */
+
+/* SITE */
+  Language: en
+  Encoding: UTF-8, ANSI
+  Standards: HTML5, CSS3
