@@ -1,1 +1,0 @@
-# JamWiki2 Documentation #
