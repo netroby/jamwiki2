@@ -23,8 +23,8 @@ import java.util.Iterator;
  *
  * @author Christian P. Lerch
  */
-class IteratorEnumeration<E> implements Enumeration<E>
-{
+class IteratorEnumeration<E> implements Enumeration<E> {
+    
     private final Iterator<E> iterator;
 
     public IteratorEnumeration(Iterator<E> iterator)

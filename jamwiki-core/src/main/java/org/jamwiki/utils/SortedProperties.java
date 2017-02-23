@@ -17,6 +17,7 @@
 package org.jamwiki.utils;
 
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,8 +28,8 @@ import java.util.TreeSet;
  */
 public class SortedProperties extends Properties {
 
-    private static final long serialVersionUID = 7394749818039181683L;
-    
+    private static final long serialVersionUID = 1L;
+
 	/**
 	 * Standard constructor for creating a sorted properties.
 	 */
@@ -58,4 +59,8 @@ public class SortedProperties extends Properties {
 		}
 		return new IteratorEnumeration<>(keys.iterator());
 	}
+    
+    public Map<String,String> asMap() {
+        return (Map<String,String>)(Map<?,?>)this;
+    }
 }
