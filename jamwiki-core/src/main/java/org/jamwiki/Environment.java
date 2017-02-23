@@ -36,7 +36,7 @@ import org.jamwiki.utils.WikiLogger;
  * <code>jamwiki.properties</code> file.
  */
 public final class Environment {
-	private static final WikiLogger logger = WikiLogger.getLogger(Environment.class.getName());
+	private static final WikiLogger log = WikiLogger.getLogger(Environment.class.getName());
 
 	public static final String PROP_BASE_COOKIE_EXPIRE = "cookie-expire";
 	public static final String PROP_BASE_DEFAULT_TOPIC = "default-topic";
@@ -150,8 +150,11 @@ public final class Environment {
 	public static final String PROP_ROLE_UPLOAD = "role-upload";
 	public static final String PROP_ROLE_VIEW = "role-view";
 	public static final String PROP_ROLE_REGISTER = "role-register";
+    
+    private static final String BOOL_TRUE = Boolean.TRUE.toString();
+    private static final String BOOL_FALSE = Boolean.FALSE.toString();
 
-	private static Environment ENVIRONMENT_INSTANCE = null;
+	private static Environment INSTANCE = null;
 	private Properties defaults = null;
 	private SortedProperties props = null;
 
@@ -159,13 +162,15 @@ public final class Environment {
 	 * The constructor loads property values from the property file.
 	 */
 	private Environment() {
-		this.initDefaultProperties();
-		logger.debug("Default properties initialized: " + this.defaults.toString());
-		this.props = loadProperties(PROPERTY_FILE_NAME, this.defaults);
+		initDefaultProperties();
+		log.debug("Default properties initialized: " + defaults.toString());
+        props = new SortedProperties(defaults);
+		props.putAll(loadProperties(PROPERTY_FILE_NAME));
 		if ("true".equals(System.getProperty("jamwiki.override.file.properties"))) {
 			overrideFromSystemProperties();
 		}
-		logger.debug("JAMWiki properties initialized: " + this.props.toString());
+        saveConfiguration();
+		log.debug("JAMWiki properties initialized: " + props.toString());
 	}
 
 	/**
@@ -175,150 +180,140 @@ public final class Environment {
 	* dynamic runtime properties (eg. upload path depends on environment).
 	*/
 	private void overrideFromSystemProperties() {
-		logger.info("Overriding file properties with system properties.");
-		Map<String, String> properties = propertiesToMap(this.props);
+		log.info("Overriding file properties with system properties.");
+		Map<String, String> properties = propertiesToMap(props);
 		for (String key : properties.keySet()) {
 			String value = System.getProperty("jamwiki." + key);
 			if (value != null) {
-				this.props.setProperty(key, value);
-				logger.info("Replaced property " + key + " with value: " + value);
+				props.setProperty(key, value);
+				log.info("Replaced property " + key + " with value: " + value);
 			}
 		}
 	}
 
 	/**
-	 * Load a property file.  First check for the file in the path from which
-	 * the application was started, then check other classpath locations.
-	 *
-	 * @param filename The name of the property file to be loaded.  This name can be
-	 *  either absolute or relative; if relative then the file will be loaded from
-	 *  the class path or from the directory from which the JVM was loaded.
-	 * @return A File object containing the properties file instance.
-	 * @throws IOException Thrown if the specified property file cannot
-	 *  be located.
+	 * Convert a Properties object to a Map object.
 	 */
-	private static File findProperties(String filename) throws IOException {
-		// read in properties file
-		File file = new File(filename);
-		if (file.exists()) {
-			return file; //NOPMD
+	private static Map<String, String> propertiesToMap(Properties properties) {
+		Map<String, String> map = new HashMap<>();
+		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+			map.put(entry.getKey().toString(), entry.getValue().toString());
 		}
-		// search for file in class loader path
-		return retrievePropertyFile(filename);
+		return map;
 	}
 
 	/**
 	 * Initialize the default property values.
 	 */
 	private void initDefaultProperties() {
-		this.defaults = new Properties();
-		this.defaults.setProperty(PROP_BASE_COOKIE_EXPIRE, "31104000");
-		this.defaults.setProperty(PROP_BASE_DEFAULT_TOPIC, "StartingPoints");
-		this.defaults.setProperty(PROP_BASE_FILE_DIR, "");
-		this.defaults.setProperty(PROP_BASE_INITIALIZED, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_BASE_LOGO_IMAGE, "logo_oliver.gif");
-		this.defaults.setProperty(PROP_BASE_META_DESCRIPTION, "");
-		this.defaults.setProperty(PROP_BASE_PERSISTENCE_TYPE, WikiBase.PERSISTENCE_INTERNAL);
-		this.defaults.setProperty(PROP_BASE_SEARCH_ENGINE, SearchEngine.SEARCH_ENGINE_LUCENE);
-		this.defaults.setProperty(PROP_BASE_WIKI_VERSION, "0.0.0");
-		this.defaults.setProperty(PROP_DB_DRIVER, "");
-		this.defaults.setProperty(PROP_DB_PASSWORD, "");
-		this.defaults.setProperty(PROP_DB_TYPE, QueryHandler.QUERY_HANDLER_HSQL);
-		this.defaults.setProperty(PROP_DB_URL, "");
-		this.defaults.setProperty(PROP_DB_USERNAME, "");
-		this.defaults.setProperty(PROP_DBCP_MAX_ACTIVE, "15");
-		this.defaults.setProperty(PROP_DBCP_MAX_IDLE, "15");
-		this.defaults.setProperty(PROP_DBCP_MAX_OPEN_PREPARED_STATEMENTS, "20");
-		this.defaults.setProperty(PROP_DBCP_MIN_EVICTABLE_IDLE_TIME, "600");
-		this.defaults.setProperty(PROP_DBCP_NUM_TESTS_PER_EVICTION_RUN, "5");
-		this.defaults.setProperty(PROP_DBCP_POOL_PREPARED_STATEMENTS, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_DBCP_TEST_ON_BORROW, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_DBCP_TEST_ON_RETURN, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_DBCP_TEST_WHILE_IDLE, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_DBCP_TIME_BETWEEN_EVICTION_RUNS, "120");
-		this.defaults.setProperty(PROP_DBCP_WHEN_EXHAUSTED_ACTION, String.valueOf(0));  //org.apache.commons.pool.impl.GenericObjectPool.WHEN_EXHAUSTED_GROW
-		this.defaults.setProperty(PROP_EMAIL_SMTP_ENABLE,Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_EMAIL_SMTP_REQUIRES_AUTH,Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_EMAIL_SMTP_USERNAME,"");
-		this.defaults.setProperty(PROP_EMAIL_SMTP_PASSWORD,"");
-		this.defaults.setProperty(PROP_EMAIL_SMTP_USE_SSL, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_EMAIL_REPLY_ADDRESS,"");
-		this.defaults.setProperty(PROP_EMAIL_SMTP_HOST,"");
-		this.defaults.setProperty(PROP_EMAIL_SMTP_PORT,"25");
-		this.defaults.setProperty(PROP_EMAIL_ADDRESS_SEPARATOR,";");
-		this.defaults.setProperty(PROP_EMAIL_DEFAULT_CONTENT_TYPE,"text/plain");
-		this.defaults.setProperty(PROP_EMAIL_SERVICE_FORGOT_PASSWORD, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_EMAIL_SERVICE_FORGOT_PASSWORD_CHALLENGE_TIMEOUT, "60"); // minutes
-		this.defaults.setProperty(PROP_EMAIL_SERVICE_FORGOT_PASSWORD_CHALLENGE_RETRIES, "3");
-		this.defaults.setProperty(PROP_EMAIL_SERVICE_FORGOT_PASSWORD_IP_LOCK_DURATION, "1440"); // minutes = 24h
-		this.defaults.setProperty(PROP_ENCRYPTION_ALGORITHM, "SHA-512");
-		this.defaults.setProperty(PROP_EXTERNAL_LINK_NEW_WINDOW, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_FILE_BLACKLIST, "bat,bin,exe,htm,html,js,jsp,php,sh");
-		this.defaults.setProperty(PROP_FILE_BLACKLIST_TYPE, String.valueOf(WikiBase.UPLOAD_BLACKLIST));
-		this.defaults.setProperty(PROP_FILE_DIR_FULL_PATH, "");
-		this.defaults.setProperty(PROP_FILE_DIR_RELATIVE_PATH, "");
-		// size is in bytes
-		this.defaults.setProperty(PROP_FILE_MAX_FILE_SIZE, "5000000");
-		this.defaults.setProperty(PROP_FILE_SERVER_URL, "");
-		this.defaults.setProperty(PROP_FILE_UPLOAD_STORAGE, WikiBase.UPLOAD_STORAGE.JAMWIKI.toString());
-		this.defaults.setProperty(PROP_FILE_WHITELIST, "bmp,gif,jpeg,jpg,pdf,png,properties,svg,txt,zip");
-		this.defaults.setProperty(PROP_HONEYPOT_ACCESS_KEY, "");
-		this.defaults.setProperty(PROP_HONEYPOT_FILTER_ENABLED, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_IMAGE_RESIZE_INCREMENT, "100");
-		this.defaults.setProperty(PROP_MAX_RECENT_CHANGES, "10000");
-		this.defaults.setProperty(PROP_MAX_TOPIC_VERSION_EXPORT, "1000");
-		this.defaults.setProperty(PROP_PARSER_ALLOW_CAPITALIZATION, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_PARSER_ALLOW_HTML, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_PARSER_ALLOW_JAVASCRIPT, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_PARSER_ALLOW_TEMPLATES, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_PARSER_CLASS, "org.jamwiki.parser.jflex.JFlexParser");
-		this.defaults.setProperty(PROP_PARSER_DISPLAY_INTERWIKI_LINKS_INLINE, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_PARSER_DISPLAY_SPECIAL_PAGE_VIRTUAL_WIKI_LINKS, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_PARSER_DISPLAY_VIRTUALWIKI_LINKS_INLINE, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_PARSER_MAX_INCLUSIONS, "250");
-		this.defaults.setProperty(PROP_PARSER_MAXIMUM_INFINITE_LOOP_LIMIT, "5");
-		this.defaults.setProperty(PROP_PARSER_MAX_PARSER_ITERATIONS, "100");
-		this.defaults.setProperty(PROP_PARSER_MAX_TEMPLATE_DEPTH, "100");
-		this.defaults.setProperty(PROP_PARSER_SIGNATURE_DATE_PATTERN, "HH:mm, dd MMMM yyyy (z)");
-		this.defaults.setProperty(PROP_PARSER_SIGNATURE_USER_PATTERN, "[[{0}|{4}]]");
-		this.defaults.setProperty(PROP_PARSER_TOC, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_PARSER_TOC_DEPTH, "5");
-		this.defaults.setProperty(PROP_PARSER_USE_NUMBERED_HTML_LINKS, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_PATTERN_INVALID_NAMESPACE_NAME, "([\\n\\r\\\\<>\\[\\]\\:_%/?&#]+)");
-		this.defaults.setProperty(PROP_PATTERN_INVALID_ROLE_NAME, "([A-Za-z0-9_]+)");
-		this.defaults.setProperty(PROP_PATTERN_INVALID_TOPIC_PATTERN, "[\\n\\r\\\\<>\\[\\]?#]");
-		this.defaults.setProperty(PROP_PATTERN_VALID_USER_LOGIN, "([A-Za-z0-9_]+)");
-		this.defaults.setProperty(PROP_PATTERN_VALID_VIRTUAL_WIKI, "([A-Za-z0-9_]+)");
-		this.defaults.setProperty(PROP_PRINT_NEW_WINDOW, Boolean.FALSE.toString());
-		this.defaults.setProperty(PROP_RECAPTCHA_EDIT, "0");
-		this.defaults.setProperty(PROP_RECAPTCHA_PRIVATE_KEY, "");
-		this.defaults.setProperty(PROP_RECAPTCHA_PUBLIC_KEY, "");
-		this.defaults.setProperty(PROP_RECAPTCHA_REGISTER, "0");
-		this.defaults.setProperty(PROP_RECENT_CHANGES_NUM, "100");
-		this.defaults.setProperty(PROP_RSS_ALLOWED, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_RSS_TITLE, "Wiki Recent Changes");
-		this.defaults.setProperty(PROP_SERVER_URL, "");
-		this.defaults.setProperty(PROP_SHARED_UPLOAD_VIRTUAL_WIKI, "");
-		this.defaults.setProperty(PROP_SITE_NAME, "JAMWiki");
-		// FIXME - hard coding
-		this.defaults.setProperty(PROP_TOPIC_EDITOR, "toolbar");
-		this.defaults.setProperty(PROP_TOPIC_SPAM_FILTER, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_TOPIC_USE_PREVIEW, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_TOPIC_USE_SHOW_CHANGES, Boolean.TRUE.toString());
-		this.defaults.setProperty(PROP_VIRTUAL_WIKI_DEFAULT, "en");
-		this.defaults.setProperty(PROP_ROLE_ADMIN, "ROLE_ADMIN");
-		this.defaults.setProperty(PROP_ROLE_ANONYMOUS, "ROLE_ANONYMOUS");
-		this.defaults.setProperty(PROP_ROLE_EDIT_EXISTING, "ROLE_EDIT_EXISTING");
-		this.defaults.setProperty(PROP_ROLE_EDIT_NEW, "ROLE_EDIT_NEW");
-		this.defaults.setProperty(PROP_ROLE_EMBEDDED, "ROLE_EMBEDDED");
-		this.defaults.setProperty(PROP_ROLE_IMPORT, "ROLE_IMPORT");
-		this.defaults.setProperty(PROP_ROLE_MOVE, "ROLE_MOVE");
-		this.defaults.setProperty(PROP_ROLE_NO_ACCOUNT, "ROLE_NO_ACCOUNT");
-		this.defaults.setProperty(PROP_ROLE_SYSADMIN, "ROLE_SYSADMIN");
-		this.defaults.setProperty(PROP_ROLE_TRANSLATE, "ROLE_TRANSLATE");
-		this.defaults.setProperty(PROP_ROLE_UPLOAD, "ROLE_UPLOAD");
-		this.defaults.setProperty(PROP_ROLE_VIEW, "ROLE_VIEW");
-		this.defaults.setProperty(PROP_ROLE_REGISTER, "ROLE_REGISTER");
+		defaults = new Properties();
+        // no meaningful defaults: must specify
+		defaults.setProperty(PROP_BASE_FILE_DIR, "");
+		defaults.setProperty(PROP_FILE_DIR_FULL_PATH, "");
+		defaults.setProperty(PROP_FILE_DIR_RELATIVE_PATH, "");
+
+		defaults.setProperty(PROP_BASE_PERSISTENCE_TYPE, WikiBase.PERSISTENCE_INTERNAL);
+        defaults.setProperty(PROP_BASE_COOKIE_EXPIRE, "31104000");
+		defaults.setProperty(PROP_BASE_DEFAULT_TOPIC, "StartingPoints");
+		defaults.setProperty(PROP_BASE_INITIALIZED, BOOL_FALSE);
+		defaults.setProperty(PROP_BASE_LOGO_IMAGE, "logo.gif");
+		defaults.setProperty(PROP_BASE_META_DESCRIPTION, "");
+		defaults.setProperty(PROP_BASE_SEARCH_ENGINE, SearchEngine.SEARCH_ENGINE_LUCENE);
+		defaults.setProperty(PROP_BASE_WIKI_VERSION, "0.0.0");
+		defaults.setProperty(PROP_DB_DRIVER, "");
+		defaults.setProperty(PROP_DB_PASSWORD, "");
+		defaults.setProperty(PROP_DB_TYPE, QueryHandler.QUERY_HANDLER_HSQL);
+		defaults.setProperty(PROP_DB_URL, "");
+		defaults.setProperty(PROP_DB_USERNAME, "");
+		defaults.setProperty(PROP_DBCP_MAX_ACTIVE, "15");
+		defaults.setProperty(PROP_DBCP_MAX_IDLE, "15");
+		defaults.setProperty(PROP_DBCP_MAX_OPEN_PREPARED_STATEMENTS, "20");
+		defaults.setProperty(PROP_DBCP_MIN_EVICTABLE_IDLE_TIME, "600");
+		defaults.setProperty(PROP_DBCP_NUM_TESTS_PER_EVICTION_RUN, "5");
+		defaults.setProperty(PROP_DBCP_POOL_PREPARED_STATEMENTS, BOOL_TRUE);
+		defaults.setProperty(PROP_DBCP_TEST_ON_BORROW, BOOL_TRUE);
+		defaults.setProperty(PROP_DBCP_TEST_ON_RETURN, BOOL_FALSE);
+		defaults.setProperty(PROP_DBCP_TEST_WHILE_IDLE, BOOL_FALSE);
+		defaults.setProperty(PROP_DBCP_TIME_BETWEEN_EVICTION_RUNS, "120");
+		defaults.setProperty(PROP_DBCP_WHEN_EXHAUSTED_ACTION, "0");  //org.apache.commons.pool.impl.GenericObjectPool.WHEN_EXHAUSTED_GROW
+		defaults.setProperty(PROP_EMAIL_SMTP_ENABLE,BOOL_FALSE);
+		defaults.setProperty(PROP_EMAIL_SMTP_REQUIRES_AUTH,BOOL_FALSE);
+		defaults.setProperty(PROP_EMAIL_SMTP_USERNAME,"");
+		defaults.setProperty(PROP_EMAIL_SMTP_PASSWORD,"");
+		defaults.setProperty(PROP_EMAIL_SMTP_USE_SSL, BOOL_FALSE);
+		defaults.setProperty(PROP_EMAIL_REPLY_ADDRESS,"");
+		defaults.setProperty(PROP_EMAIL_SMTP_HOST,"");
+		defaults.setProperty(PROP_EMAIL_SMTP_PORT,"25");
+		defaults.setProperty(PROP_EMAIL_ADDRESS_SEPARATOR,";");
+		defaults.setProperty(PROP_EMAIL_DEFAULT_CONTENT_TYPE,"text/plain");
+		defaults.setProperty(PROP_EMAIL_SERVICE_FORGOT_PASSWORD, BOOL_FALSE);
+		defaults.setProperty(PROP_EMAIL_SERVICE_FORGOT_PASSWORD_CHALLENGE_TIMEOUT, "60"); // minutes
+		defaults.setProperty(PROP_EMAIL_SERVICE_FORGOT_PASSWORD_CHALLENGE_RETRIES, "3");
+		defaults.setProperty(PROP_EMAIL_SERVICE_FORGOT_PASSWORD_IP_LOCK_DURATION, "1440"); // minutes = 24h
+		defaults.setProperty(PROP_ENCRYPTION_ALGORITHM, "SHA-512");
+		defaults.setProperty(PROP_EXTERNAL_LINK_NEW_WINDOW, BOOL_FALSE);
+		defaults.setProperty(PROP_FILE_BLACKLIST, "bat,bin,exe,htm,html,js,jsp,php,sh");
+		defaults.setProperty(PROP_FILE_BLACKLIST_TYPE, String.valueOf(WikiBase.UPLOAD_BLACKLIST));
+		defaults.setProperty(PROP_FILE_MAX_FILE_SIZE, "5000000");   // size is in bytes
+		defaults.setProperty(PROP_FILE_SERVER_URL, "");
+		defaults.setProperty(PROP_FILE_UPLOAD_STORAGE, WikiBase.UPLOAD_STORAGE.JAMWIKI.toString());
+		defaults.setProperty(PROP_FILE_WHITELIST, "bmp,gif,jpeg,jpg,pdf,png,properties,svg,txt,zip");
+		defaults.setProperty(PROP_HONEYPOT_ACCESS_KEY, "");
+		defaults.setProperty(PROP_HONEYPOT_FILTER_ENABLED, BOOL_FALSE);
+		defaults.setProperty(PROP_IMAGE_RESIZE_INCREMENT, "100");
+		defaults.setProperty(PROP_MAX_RECENT_CHANGES, "10000");
+		defaults.setProperty(PROP_MAX_TOPIC_VERSION_EXPORT, "1000");
+		defaults.setProperty(PROP_PARSER_ALLOW_CAPITALIZATION, BOOL_TRUE);
+		defaults.setProperty(PROP_PARSER_ALLOW_HTML, BOOL_TRUE);
+		defaults.setProperty(PROP_PARSER_ALLOW_JAVASCRIPT, BOOL_FALSE);
+		defaults.setProperty(PROP_PARSER_ALLOW_TEMPLATES, BOOL_TRUE);
+		defaults.setProperty(PROP_PARSER_CLASS, "org.jamwiki.parser.jflex.JFlexParser");
+		defaults.setProperty(PROP_PARSER_DISPLAY_INTERWIKI_LINKS_INLINE, BOOL_FALSE);
+		defaults.setProperty(PROP_PARSER_DISPLAY_SPECIAL_PAGE_VIRTUAL_WIKI_LINKS, BOOL_TRUE);
+		defaults.setProperty(PROP_PARSER_DISPLAY_VIRTUALWIKI_LINKS_INLINE, BOOL_FALSE);
+		defaults.setProperty(PROP_PARSER_MAX_INCLUSIONS, "250");
+		defaults.setProperty(PROP_PARSER_MAXIMUM_INFINITE_LOOP_LIMIT, "5");
+		defaults.setProperty(PROP_PARSER_MAX_PARSER_ITERATIONS, "100");
+		defaults.setProperty(PROP_PARSER_MAX_TEMPLATE_DEPTH, "100");
+		defaults.setProperty(PROP_PARSER_SIGNATURE_DATE_PATTERN, "HH:mm, dd MMMM yyyy (z)");
+		defaults.setProperty(PROP_PARSER_SIGNATURE_USER_PATTERN, "[[{0}|{4}]]");
+		defaults.setProperty(PROP_PARSER_TOC, BOOL_TRUE);
+		defaults.setProperty(PROP_PARSER_TOC_DEPTH, "5");
+		defaults.setProperty(PROP_PARSER_USE_NUMBERED_HTML_LINKS, BOOL_TRUE);
+		defaults.setProperty(PROP_PATTERN_INVALID_NAMESPACE_NAME, "([\\n\\r\\\\<>\\[\\]\\:_%/?&#]+)");
+		defaults.setProperty(PROP_PATTERN_INVALID_ROLE_NAME, "([A-Za-z0-9_]+)");
+		defaults.setProperty(PROP_PATTERN_INVALID_TOPIC_PATTERN, "[\\n\\r\\\\<>\\[\\]?#]");
+		defaults.setProperty(PROP_PATTERN_VALID_USER_LOGIN, "([A-Za-z0-9_]+)");
+		defaults.setProperty(PROP_PATTERN_VALID_VIRTUAL_WIKI, "([A-Za-z0-9_]+)");
+		defaults.setProperty(PROP_PRINT_NEW_WINDOW, BOOL_FALSE);
+		defaults.setProperty(PROP_RECAPTCHA_EDIT, "0");
+		defaults.setProperty(PROP_RECAPTCHA_PRIVATE_KEY, "");
+		defaults.setProperty(PROP_RECAPTCHA_PUBLIC_KEY, "");
+		defaults.setProperty(PROP_RECAPTCHA_REGISTER, "0");
+		defaults.setProperty(PROP_RECENT_CHANGES_NUM, "100");
+		defaults.setProperty(PROP_RSS_ALLOWED, BOOL_TRUE);
+		defaults.setProperty(PROP_RSS_TITLE, "Wiki Recent Changes");
+		defaults.setProperty(PROP_SERVER_URL, "");
+		defaults.setProperty(PROP_SHARED_UPLOAD_VIRTUAL_WIKI, "");
+		defaults.setProperty(PROP_SITE_NAME, "JamWiki2");
+		defaults.setProperty(PROP_TOPIC_EDITOR, "toolbar");     // FIXME - hard coding
+		defaults.setProperty(PROP_TOPIC_SPAM_FILTER, BOOL_TRUE);
+		defaults.setProperty(PROP_TOPIC_USE_PREVIEW, BOOL_TRUE);
+		defaults.setProperty(PROP_TOPIC_USE_SHOW_CHANGES, BOOL_TRUE);
+		defaults.setProperty(PROP_VIRTUAL_WIKI_DEFAULT, "en");
+		defaults.setProperty(PROP_ROLE_ADMIN, "ROLE_ADMIN");
+		defaults.setProperty(PROP_ROLE_ANONYMOUS, "ROLE_ANONYMOUS");
+		defaults.setProperty(PROP_ROLE_EDIT_EXISTING, "ROLE_EDIT_EXISTING");
+		defaults.setProperty(PROP_ROLE_EDIT_NEW, "ROLE_EDIT_NEW");
+		defaults.setProperty(PROP_ROLE_EMBEDDED, "ROLE_EMBEDDED");
+		defaults.setProperty(PROP_ROLE_IMPORT, "ROLE_IMPORT");
+		defaults.setProperty(PROP_ROLE_MOVE, "ROLE_MOVE");
+		defaults.setProperty(PROP_ROLE_NO_ACCOUNT, "ROLE_NO_ACCOUNT");
+		defaults.setProperty(PROP_ROLE_SYSADMIN, "ROLE_SYSADMIN");
+		defaults.setProperty(PROP_ROLE_TRANSLATE, "ROLE_TRANSLATE");
+		defaults.setProperty(PROP_ROLE_UPLOAD, "ROLE_UPLOAD");
+		defaults.setProperty(PROP_ROLE_VIEW, "ROLE_VIEW");
+		defaults.setProperty(PROP_ROLE_REGISTER, "ROLE_REGISTER");
 	}
 
 	/**
@@ -341,11 +336,11 @@ public final class Environment {
 	 * @return Returns an instance of the current system properties.
 	 */
 	public static Properties getInstance() {
-		if (ENVIRONMENT_INSTANCE == null) {
+		if (INSTANCE == null) {
 			// initialize the singleton instance
-			ENVIRONMENT_INSTANCE = new Environment();
+			INSTANCE = new Environment();
 		}
-		return ENVIRONMENT_INSTANCE.props;
+		return INSTANCE.props;
 	}
 
 	/**
@@ -357,7 +352,7 @@ public final class Environment {
 	public static int getIntValue(String name) {
 		int value = NumberUtils.toInt(getValue(name), -1);
 		if (value == -1) {
-			logger.warn("Invalid integer property " + name + " with value " + value);
+			log.warn("Invalid integer property " + name + " with value " + value);
 		}
 		// FIXME - should this otherwise indicate an invalid property?
 		return value;
@@ -372,7 +367,7 @@ public final class Environment {
 	public static long getLongValue(String name) {
 		long value = NumberUtils.toLong(getValue(name), -1);
 		if (value == -1) {
-			logger.warn("Invalid long property " + name + " with value " + value);
+			log.warn("Invalid long property " + name + " with value " + value);
 		}
 		// FIXME - should this otherwise indicate an invalid property?
 		return value;
@@ -428,16 +423,16 @@ public final class Environment {
 		try {
 			file = findProperties(propertyFile);
 			if (file == null) {
-				logger.warn("Property file " + propertyFile + " does not exist");
+				log.warn("Property file " + propertyFile + " does not exist");
 			} else if (!file.exists()) {
-				logger.warn("Property file " + file.getPath() + " does not exist");
+				log.warn("Property file " + file.getPath() + " does not exist");
 			} else {
-				logger.info("Loading properties from " + file.getPath());
+				log.info("Loading properties from " + file.getPath());
 				fis = new FileInputStream(file);
 				properties.load(fis);
 			}
 		} catch (IOException e) {
-			logger.error("Failure while trying to load properties file " + file.getPath(), e);
+			log.error("Failure while trying to load properties file " + file.getPath(), e);
 		} finally {
 			IOUtils.closeQuietly(fis);
 		}
@@ -445,14 +440,24 @@ public final class Environment {
 	}
 
 	/**
-	 * Convert a Properties object to a Map object.
+	 * Load a property file.  First check for the file in the path from which
+	 * the application was started, then check other classpath locations.
+	 *
+	 * @param filename The name of the property file to be loaded.  This name can be
+	 *  either absolute or relative; if relative then the file will be loaded from
+	 *  the class path or from the directory from which the JVM was loaded.
+	 * @return A File object containing the properties file instance.
+	 * @throws IOException Thrown if the specified property file cannot
+	 *  be located.
 	 */
-	private static Map<String, String> propertiesToMap(Properties properties) {
-		Map<String, String> map = new HashMap<String, String>();
-		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-			map.put(entry.getKey().toString(), entry.getValue().toString());
+	private static File findProperties(String filename) throws IOException {
+		// read in properties file
+		File file = new File(filename);
+		if (file.exists()) {
+			return file; //NOPMD
 		}
-		return map;
+		// search for file in class loader path
+		return retrievePropertyFile(filename);
 	}
 
 	/**
@@ -474,7 +479,7 @@ public final class Environment {
 		try {
 			return new File(ResourceUtil.getClassLoaderRoot(), filename);
 		} catch (IOException e) {
-			logger.error("Error while searching for resource " + filename, e);
+			log.error("Error while searching for resource " + filename, e);
 		}
 		return null;
 	}
@@ -482,19 +487,16 @@ public final class Environment {
 	/**
 	 * Persist the current wiki system configuration and reload all values.
 	 *
-	 * @throws WikiException Thrown if a failure occurs while saving the
-	 *  configuration values.
 	 */
-	public static void saveConfiguration() throws WikiException {
+	public static void saveConfiguration() {
 		try {
 			saveProperties(PROPERTY_FILE_NAME, getInstance(), null);
 			// do not use WikiBase.getDataHandler() directly since properties are
 			// being changed
 			WikiBase.getDataHandler().writeConfiguration(propertiesToMap(getInstance()));
-		} catch (IOException e) {
-			throw new WikiException(new WikiMessage("error.unknown", e.getMessage()));
-		} catch (DataAccessException e) {
-			throw new WikiException(new WikiMessage("error.unknown", e.getMessage()));
+		} catch (WikiException | IOException | DataAccessException e) {
+			//throw new WikiException(new WikiMessage("error.unknown", e.getMessage()));
+            log.error("Error while saving configuration: " + e.toString());
 		}
 	}
 
