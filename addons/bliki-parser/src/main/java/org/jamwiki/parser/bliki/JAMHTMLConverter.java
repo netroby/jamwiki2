@@ -69,8 +69,8 @@ public class JAMHTMLConverter extends HTMLConverter {
 			imageMetadata.setHorizontalAlignment(ImageHorizontalAlignmentEnum.CENTER);
 		}
 		try {
-			resultBuffer.append(ImageUtil.buildImageLinkHtml(fParserInput.getContext(), fParserInput.getVirtualWiki(), model
-					.getImageNamespace() + Namespace.SEPARATOR + imageName, imageMetadata, null, false, null));
+			resultBuffer.append(ImageUtil.buildImageLinkHtml(fParserInput.getContext(), fParserInput.getVirtualWiki(), 
+					model.getImageNamespace() + Namespace.SEPARATOR + imageName, imageMetadata, null, false, null));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
