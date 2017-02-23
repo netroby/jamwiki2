@@ -2079,15 +2079,12 @@ public class AnsiDataHandler {
 			WikiDatabase.setupSpecialPage(locale, virtualWiki.getName(), WikiBase.SPECIAL_PAGE_HEADER, user, true, false);
 			WikiDatabase.setupSpecialPage(locale, virtualWiki.getName(), WikiBase.SPECIAL_PAGE_SYSTEM_CSS, user, true, true);
 			WikiDatabase.setupSpecialPage(locale, virtualWiki.getName(), WikiBase.SPECIAL_PAGE_CUSTOM_CSS, user, true, false);
-		} catch (DataAccessException e) {
+		} catch (DataAccessException | WikiException e) {
 			DatabaseConnection.rollbackOnException(status, e);
 			throw e;
 		} catch (SQLException e) {
 			DatabaseConnection.rollbackOnException(status, e);
 			throw new DataAccessException(e);
-		} catch (WikiException e) {
-			DatabaseConnection.rollbackOnException(status, e);
-			throw e;
 		}
 		DatabaseConnection.commit(status);
 	}
@@ -2116,18 +2113,12 @@ public class AnsiDataHandler {
 			ParserOutput parserOutput = ParserUtil.parserOutput(topic.getTopicContent(), topic.getVirtualWiki(), topic.getName());
 			topic.setDeleteDate(null);
 			this.writeTopic(topic, topicVersion, parserOutput.getCategories(), parserOutput.getLinks());
-		} catch (DataAccessException e) {
+		} catch (DataAccessException | WikiException e) {
 			DatabaseConnection.rollbackOnException(status, e);
 			throw e;
-		} catch (SQLException e) {
+		} catch (SQLException | ParserException e) {
 			DatabaseConnection.rollbackOnException(status, e);
 			throw new DataAccessException(e);
-		} catch (ParserException e) {
-			DatabaseConnection.rollbackOnException(status, e);
-			throw new DataAccessException(e);
-		} catch (WikiException e) {
-			DatabaseConnection.rollbackOnException(status, e);
-			throw e;
 		}
 		DatabaseConnection.commit(status);
 	}
@@ -2162,21 +2153,15 @@ public class AnsiDataHandler {
 			TopicVersion topicVersion = new TopicVersion(null, userDisplay, "Automatically updated by system upgrade", contents, charactersChanged);
 			ParserOutput parserOutput = ParserUtil.parserOutput(topic.getTopicContent(), virtualWiki, topicName);
 			writeTopic(topic, topicVersion, parserOutput.getCategories(), parserOutput.getLinks());
-		} catch (DataAccessException e) {
+		} catch (DataAccessException | WikiException e) {
 			DatabaseConnection.rollbackOnException(status, e);
 			throw e;
 		} catch (ParserException e) {
 			DatabaseConnection.rollbackOnException(status, e);
 			throw new DataAccessException(e);
-		} catch (IOException e) {
+		} catch (IOException | SQLException e) {
 			DatabaseConnection.rollbackOnException(status, e);
 			throw new DataAccessException(e);
-		} catch (SQLException e) {
-			DatabaseConnection.rollbackOnException(status, e);
-			throw new DataAccessException(e);
-		} catch (WikiException e) {
-			DatabaseConnection.rollbackOnException(status, e);
-			throw e;
 		}
 		DatabaseConnection.commit(status);
 	}

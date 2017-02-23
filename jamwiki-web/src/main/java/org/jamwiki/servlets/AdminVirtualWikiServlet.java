@@ -143,12 +143,8 @@ public class AdminVirtualWikiServlet extends JAMWikiServlet {
 	 */
 	private void commonInterwiki(HttpServletRequest request, ModelAndView next, WikiPageInfo pageInfo) {
 		Environment.setBooleanValue(Environment.PROP_PARSER_DISPLAY_INTERWIKI_LINKS_INLINE, !StringUtils.isBlank(request.getParameter(Environment.PROP_PARSER_DISPLAY_INTERWIKI_LINKS_INLINE)));
-		try {
-			Environment.saveConfiguration();
-			pageInfo.addMessage(new WikiMessage("admin.vwiki.message.interwiki.common"));
-		} catch (WikiException e) {
-			pageInfo.addError(e.getWikiMessage());
-		}
+		Environment.saveConfiguration();
+		pageInfo.addMessage(new WikiMessage("admin.vwiki.message.interwiki.common"));
 		view(request, next, pageInfo);
 	}
 
@@ -162,12 +158,8 @@ public class AdminVirtualWikiServlet extends JAMWikiServlet {
 		}
 		Environment.setBooleanValue(Environment.PROP_PARSER_DISPLAY_SPECIAL_PAGE_VIRTUAL_WIKI_LINKS, !StringUtils.isBlank(request.getParameter(Environment.PROP_PARSER_DISPLAY_SPECIAL_PAGE_VIRTUAL_WIKI_LINKS)));
 		Environment.setBooleanValue(Environment.PROP_PARSER_DISPLAY_VIRTUALWIKI_LINKS_INLINE, !StringUtils.isBlank(request.getParameter(Environment.PROP_PARSER_DISPLAY_VIRTUALWIKI_LINKS_INLINE)));
-		try {
-			Environment.saveConfiguration();
-			pageInfo.addMessage(new WikiMessage("admin.vwiki.message.commonupdated"));
-		} catch (WikiException e) {
-			pageInfo.addError(e.getWikiMessage());
-		}
+		Environment.saveConfiguration();
+		pageInfo.addMessage(new WikiMessage("admin.vwiki.message.commonupdated"));
 		view(request, next, pageInfo);
 	}
 
@@ -176,7 +168,7 @@ public class AdminVirtualWikiServlet extends JAMWikiServlet {
 	 */
 	private void namespaces(HttpServletRequest request, ModelAndView next, WikiPageInfo pageInfo) throws Exception {
 		String virtualWiki = request.getParameter("selected");
-		List<Namespace> namespaces = new ArrayList<Namespace>();
+		List<Namespace> namespaces = new ArrayList<>();
 		String[] namespaceIds = request.getParameterValues("namespace_id");
 		String defaultLabel;
 		String translatedLabel;

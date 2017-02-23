@@ -69,9 +69,14 @@ public class SetupServlet extends JAMWikiServlet {
 	 *
 	 * @param request - Standard HttpServletRequest object.
 	 * @param response - Standard HttpServletResponse object.
+     * @param next
+     * @param pageInfo
 	 * @return A <code>ModelAndView</code> object to be handled by the rest of the Spring framework.
+     * @throws java.lang.Exception
 	 */
-	public ModelAndView handleJAMWikiRequest(HttpServletRequest request, HttpServletResponse response, ModelAndView next, WikiPageInfo pageInfo) throws Exception {
+    @Override
+	public ModelAndView handleJAMWikiRequest(HttpServletRequest request, HttpServletResponse response,
+            ModelAndView next, WikiPageInfo pageInfo) throws Exception {
 		if (!WikiUtil.isFirstUse()) {
 			throw new WikiException(new WikiMessage("setup.error.notrequired"));
 		}
@@ -80,7 +85,7 @@ public class SetupServlet extends JAMWikiServlet {
 				throw new WikiException(new WikiMessage("setup.error.jdk", MINIMUM_JDK_VERSION.toString(), System.getProperty("java.version")));
 			}
 			VirtualWiki virtualWiki = VirtualWiki.defaultVirtualWiki();
-			if (!StringUtils.isBlank(request.getParameter("override")) && this.restoreProperties(pageInfo)) {
+			if (!StringUtils.isBlank(request.getParameter("override")) && restoreProperties(pageInfo)) {
 				if (WikiUtil.isUpgrade()) {
 					ServletUtil.redirect(next, virtualWiki.getName(), "Special:Upgrade");
 				} else {
@@ -125,7 +130,7 @@ public class SetupServlet extends JAMWikiServlet {
 	private boolean initialize(HttpServletRequest request, ModelAndView next, WikiPageInfo pageInfo) throws Exception {
 		setProperties(request, next);
 		WikiUser user = setAdminUser(request);
-		this.validate(request, pageInfo, user);
+		validate(request, pageInfo, user);
 		if (!pageInfo.getErrors().isEmpty()) {
 			next.addObject("username", user.getUsername());
 			next.addObject("newPassword", request.getParameter("newPassword"));
@@ -188,8 +193,6 @@ public class SetupServlet extends JAMWikiServlet {
 			result = true;
 		} catch (DataAccessException e) {
 			pageInfo.addError(new WikiMessage("error.unknown", e.getMessage()));
-		} catch (WikiException e) {
-			pageInfo.addError(e.getWikiMessage());
 		}
 		return result;
 	}

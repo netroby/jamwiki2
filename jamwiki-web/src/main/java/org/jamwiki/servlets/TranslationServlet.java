@@ -168,7 +168,8 @@ public class TranslationServlet extends JAMWikiServlet {
 			// if the user wants to see only untranslated values, return the intersection of the base
 			// translation list and the translated file list
 			if (BooleanUtils.toBoolean(request.getParameter("hideTranslated"))) {
-				Map tmp = Utilities.intersect(translations, Environment.loadProperties("ApplicationResources.properties"));
+				Map<String,String> tmp = Utilities.intersect(
+                        translations.asMap(), Environment.loadProperties("ApplicationResources.properties").asMap());
 				translations = new SortedProperties();
 				translations.putAll(tmp);
 				next.addObject("hideTranslated", true);

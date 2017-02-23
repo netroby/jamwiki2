@@ -269,10 +269,10 @@ public abstract class Utilities {
 	 * useful for critical-path lookups.
 	 */
 	public static Map<String, String> initializeLookupMap(String... args) {
-		Map<String, String> lookupMap = new HashMap<String, String>();
-		for (int i = 0; i < args.length; i++) {
-			lookupMap.put(args[i], args[i]);
-		}
+		Map<String, String> lookupMap = new HashMap<>();
+        for (String arg : args) {
+            lookupMap.put(arg, arg);
+        }
 		return lookupMap;
 	}
 
@@ -283,7 +283,7 @@ public abstract class Utilities {
 		if (map1 == null || map2 == null) {
 			throw new IllegalArgumentException("Utilities.intersection() requires non-null arguments");
 		}
-		Map<K, V> result = new HashMap<K, V>();
+		Map<K, V> result = new HashMap<>();
 		for (Map.Entry<K, V> entry : map1.entrySet()) {
 			if (ObjectUtils.equals(entry.getValue(), map2.get(entry.getKey()))) {
 				result.put(entry.getKey(), entry.getValue());
