@@ -178,11 +178,11 @@ public class TranslationServlet extends JAMWikiServlet {
 		pageInfo.setContentJsp(JSP_ADMIN_TRANSLATION);
 		pageInfo.setAdmin(true);
 		pageInfo.setPageTitle(new WikiMessage("translation.title"));
-		next.addObject("translations", new TreeMap(translations));
+		next.addObject("translations", new TreeMap<>(translations));
 		next.addObject("codes", this.retrieveTranslationCodes());
 		next.addObject("language", language);
 		SortedProperties defaultTranslations = new SortedProperties(Environment.loadProperties("ApplicationResources.properties"));
-		next.addObject("defaultTranslations", new TreeMap(defaultTranslations));
+		next.addObject("defaultTranslations", new TreeMap<>(defaultTranslations));
 	}
 
 	/**

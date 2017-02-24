@@ -16,14 +16,16 @@
  */
 package org.jamwiki.search;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.reflect.Method;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TopScoreDocCollector;
+//- import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLEncoder;
@@ -50,16 +52,20 @@ public class RankingAlgorithmSearchEngine extends LuceneSearchEngine {
 	 * @return A list of SearchResultEntry objects for all documents that
 	 *  contain the search term.
 	 */
+    @Override
 	public List<SearchResultEntry> findResults(String virtualWiki, String text, List<Integer> namespaces) {
 		StandardAnalyzer analyzer = new StandardAnalyzer(USE_LUCENE_VERSION);
-		List<SearchResultEntry> results = new ArrayList<SearchResultEntry>();
+		List<SearchResultEntry> results = new ArrayList<>();
 		logger.trace("search text: " + text);
 		try {
 			IndexSearcher searcher = this.retrieveIndexSearcher(virtualWiki);
 			Query query = this.createSearchQuery(searcher, analyzer, text, namespaces);
 			// actually perform the search
-			TopScoreDocCollector collector = TopScoreDocCollector.create(MAXIMUM_RESULTS_PER_SEARCH, true);
-			Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<span class=\"highlight\">", "</span>"), new SimpleHTMLEncoder(), new QueryScorer(query));
+			//- TopScoreDocCollector collector = TopScoreDocCollector.create(MAXIMUM_RESULTS_PER_SEARCH, true);
+			Highlighter highlighter = new Highlighter(
+                    new SimpleHTMLFormatter("<span class=\"highlight\">", "</span>"), 
+                    new SimpleHTMLEncoder(), 
+                    new QueryScorer(query));
 			try {
 				Class classRQ = Class.forName("com.transaxtions.search.rankingalgorithm.RankingQuery");
 				Class classQuery = Class.forName("org.apache.lucene.search.Query");
@@ -79,23 +85,23 @@ public class RankingAlgorithmSearchEngine extends LuceneSearchEngine {
 				Method methodRH_docid = classRH.getMethod("docid", classArray);
 				Method methodRH_score = classRH.getMethod("score", classArray);
 				Object lenobject = methodRH_length.invoke(hitsobject);
-				int length = ((Integer)lenobject).intValue();
+				int length = (Integer)lenobject;
 				for (int i = 0; i < length; i++) {
 					args = new Object[1];
-					args[0] = new Integer(i);
+					args[0] = i;
 					Object docobject = methodRH_docid.invoke(hitsobject, args);
-					int docId = ((Integer)docobject).intValue();
+					int docId = (Integer)docobject;
 					Document doc = searcher.doc(docId);
 					String summary = retrieveResultSummary(doc, highlighter, analyzer);
 					Object scoreobject = methodRH_score.invoke(hitsobject, args);
-					float score = ((Float)scoreobject).floatValue();
+					float score = (Float)scoreobject;
 					SearchResultEntry result = new SearchResultEntry(doc.get(FIELD_TOPIC_NAME), score, summary);
 					results.add(result);
 				}
 			} catch (Throwable t) {
 				logger.error("Failure while executing RankingAlgorithm search", t);
 			}
-		} catch (Exception e) {
+		} catch (IOException | ParseException e) {
 			logger.error("Exception while searching for " + text, e);
 		}
 		return results;

@@ -342,7 +342,7 @@ public class JFlexParserUtil {
 	protected static List<WikiReference> retrieveReferences(ParserInput parserInput) {
 		List<WikiReference> references = (List<WikiReference>)parserInput.getTempParam(WikiReferenceTag.REFERENCES_PARAM);
 		if (references == null) {
-			references = new ArrayList<WikiReference>();
+			references = new ArrayList<>();
 			parserInput.addTempParam(WikiReferenceTag.REFERENCES_PARAM, references);
 		}
 		return references;

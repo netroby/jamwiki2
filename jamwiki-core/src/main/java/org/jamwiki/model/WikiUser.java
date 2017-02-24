@@ -27,6 +27,8 @@ import java.util.Map;
  */
 public class WikiUser implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
 	private Timestamp createDate = new Timestamp(System.currentTimeMillis());
 	private String createIpAddress = "0.0.0.0";
 	private String email;
@@ -50,6 +52,13 @@ public class WikiUser implements Serializable {
 	public static final String USER_PREFERENCE_TIMEZONE = "user.timezone";
 	public static final String USER_PREFERENCE_DATE_FORMAT = "user.date.format";
 	public static final String USER_PREFERENCE_TIME_FORMAT = "user.time.format";
+    
+	/**
+	 *
+	 */
+	public WikiUser(String username) {
+		this.username = username;
+	}
 
 	/**
 	 *
@@ -77,13 +86,6 @@ public class WikiUser implements Serializable {
 	 */
 	public void setDefaultLocale(String defaultLocale) {
 		this.getPreferences().put(USER_PREFERENCE_DEFAULT_LOCALE, defaultLocale);
-	}
-
-	/**
-	 *
-	 */
-	public WikiUser(String username) {
-		this.username = username;
 	}
 
 	/**
@@ -182,7 +184,7 @@ public class WikiUser implements Serializable {
 	 */
 	public Map<String, String> getPreferences() {
 		if (this.preferences == null) {
-			this.preferences = new HashMap<String, String>();
+			this.preferences = new HashMap<>();
 		}
 		return preferences;
 	}
@@ -281,12 +283,29 @@ public class WikiUser implements Serializable {
 	/**
 	 *
 	 */
+    @Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("WikiUser ID " + userId  + ": " + username + "; displayName: " + displayName);
-		sb.append("; Password reset challenge Data: challenge=" + challengeValue + "; challenge date=" + challengeDate + "; challenge IP=" + challengeIp + "; challenge request count=" + challengeTries);
+		StringBuilder sb = new StringBuilder();
+        sb.append("WikiUser{ ID: ");
+        sb.append(userId);
+        sb.append(": ");
+        sb.append(username);
+        sb.append("; displayName: ");
+        sb.append(displayName);
+		sb.append("; Password reset challenge Data: challenge=");
+        sb.append(challengeValue);
+        sb.append("; challenge date=");
+        sb.append(challengeDate);
+        sb.append("; challenge IP=");
+        sb.append(challengeIp);
+        sb.append("; challenge request count=");
+        sb.append(challengeTries);
 		sb.append("; preferences: ");
 		for (String key : preferences.keySet()) {
-			sb.append(key + "=" + this.getPreferences().get(key) + "; ");
+			sb.append(key);
+            sb.append('=');
+            sb.append(getPreferences().get(key));
+            sb.append("; ");
 		}
 		return sb.toString();
 	}

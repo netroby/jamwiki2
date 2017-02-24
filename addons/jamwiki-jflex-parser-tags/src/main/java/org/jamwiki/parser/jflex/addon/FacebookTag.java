@@ -143,7 +143,7 @@ public class FacebookTag implements JFlexCustomTagItem {
 	 * Parse the like/recommend button.
 	 */
 	private String parseButtonCode(JFlexLexer lexer, Map<String, String> attributes) throws IOException {
-		String[] args = new String[6];
+		Object[] args = new String[6];
 		if (StringUtils.isBlank(attributes.get(ATTRIBUTE_HREF))) {
 			WikiLink wikiLink = new WikiLink(lexer.getParserInput().getContext(), lexer.getParserInput().getVirtualWiki(), lexer.getParserInput().getTopicName());
 			args[0] = LinkUtil.normalize(Environment.getValue(Environment.PROP_SERVER_URL) + wikiLink.toRelativeUrl());
@@ -177,7 +177,7 @@ public class FacebookTag implements JFlexCustomTagItem {
 			return "";
 		}
 		lexer.getParserInput().addTempParam(FACEBOOK_SHARED_PARAM, true);
-		String[] args = new String[2];
+		Object[] args = new String[2];
 		args[0] = (attributes.get(ATTRIBUTE_LOCALE) != null) ? attributes.get(ATTRIBUTE_LOCALE) : "en_US";
 		args[1] = (attributes.get(ATTRIBUTE_APP_ID) != null) ? attributes.get(ATTRIBUTE_APP_ID) : "";
 		return WikiUtil.formatFromTemplate(TEMPLATE_FACEBOOK_SHARED, args);

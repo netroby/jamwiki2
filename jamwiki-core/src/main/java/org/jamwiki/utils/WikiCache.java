@@ -34,6 +34,7 @@ import org.jamwiki.Environment;
 public class WikiCache<K, V> {
 
 	private static final WikiLogger logger = WikiLogger.getLogger(WikiCache.class.getName());
+    
 	private static CacheManager CACHE_MANAGER = null;
 	private static boolean INITIALIZED = false;
 	// track whether this instance was instantiated from an ehcache.xml file or using configured properties.

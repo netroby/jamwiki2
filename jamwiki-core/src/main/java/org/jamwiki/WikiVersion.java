@@ -33,9 +33,9 @@ public class WikiVersion {
 
 	/**
 	 * Constructor to create a new Wiki version object using a version string of
-	 * the form "0.3.5".
+	 * the form "#.#.#".
 	 *
-	 * @param version A version string of the form "0.3.5".
+	 * @param version A version string of the form "#.#.#".
 	 */
 	public WikiVersion(String version) {
 		if (StringUtils.isBlank(version)) {

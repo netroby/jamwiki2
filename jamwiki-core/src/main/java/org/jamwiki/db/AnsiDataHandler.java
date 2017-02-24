@@ -70,26 +70,27 @@ import org.springframework.transaction.TransactionStatus;
  */
 public class AnsiDataHandler {
 
-	/** Any topic lookup that takes longer than the specified time (in ms) will trigger a log message. */
+	private static final WikiLogger logger = WikiLogger.getLogger(AnsiDataHandler.class.getName());
+
+    /** Any topic lookup that takes longer than the specified time (in ms) will trigger a log message. */
 	private static final int TIME_LIMIT_TOPIC_LOOKUP = 20;
-	private static final WikiCache<String, List<Interwiki>> CACHE_INTERWIKI_LIST = new WikiCache<String, List<Interwiki>>("org.jamwiki.db.AnsiDataHandler.CACHE_INTERWIKI_LIST");
-	private static final WikiCache<String, List<Namespace>> CACHE_NAMESPACE_LIST = new WikiCache<String, List<Namespace>>("org.jamwiki.db.AnsiDataHandler.CACHE_NAMESPACE_LIST");
-	private static final WikiCache<String, List<RoleMap>> CACHE_ROLE_MAP_GROUP = new WikiCache<String, List<RoleMap>>("org.jamwiki.db.AnsiDataHandler.CACHE_ROLE_MAP_GROUP");
+	private static final WikiCache<String, List<Interwiki>> CACHE_INTERWIKI_LIST = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_INTERWIKI_LIST");
+	private static final WikiCache<String, List<Namespace>> CACHE_NAMESPACE_LIST = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_NAMESPACE_LIST");
+	private static final WikiCache<String, List<RoleMap>> CACHE_ROLE_MAP_GROUP = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_ROLE_MAP_GROUP");
 	/**
 	 * Cache a topic name lookup to the actual topic name, useful for cases where
 	 * a topic name may vary by case.  This cache should not include deleted topics.
 	 */
-	private static final WikiCache<String, String> CACHE_TOPIC_NAMES_BY_NAME = new WikiCache<String, String>("org.jamwiki.db.AnsiDataHandler.CACHE_TOPIC_NAMES_BY_NAME");
+	private static final WikiCache<String, String> CACHE_TOPIC_NAMES_BY_NAME = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_TOPIC_NAMES_BY_NAME");
 	/** Cache a topic object by its ID value.  This cache may include deleted topics. */
-	private static final WikiCache<Integer, Topic> CACHE_TOPICS_BY_ID = new WikiCache<Integer, Topic>("org.jamwiki.db.AnsiDataHandler.CACHE_TOPICS_BY_ID");
+	private static final WikiCache<Integer, Topic> CACHE_TOPICS_BY_ID = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_TOPICS_BY_ID");
 	/** Cache topic IDs by the topic name.  This cache may include deleted topics. */
-	private static final WikiCache<String, Integer> CACHE_TOPIC_IDS_BY_NAME = new WikiCache<String, Integer>("org.jamwiki.db.AnsiDataHandler.CACHE_TOPIC_IDS_BY_NAME");
-	private static final WikiCache<Integer, TopicVersion> CACHE_TOPIC_VERSIONS = new WikiCache<Integer, TopicVersion>("org.jamwiki.db.AnsiDataHandler.CACHE_TOPIC_VERSIONS");
-	private static final WikiCache<String, Map<Object, UserBlock>> CACHE_USER_BLOCKS_ACTIVE = new WikiCache<String, Map<Object, UserBlock>>("org.jamwiki.db.AnsiDataHandler.CACHE_USER_BLOCKS_ACTIVE");
-	private static final WikiCache<Integer, WikiUser> CACHE_USER_BY_USER_ID = new WikiCache<Integer, WikiUser>("org.jamwiki.db.AnsiDataHandler.CACHE_USER_BY_USER_ID");
-	private static final WikiCache<String, WikiUser> CACHE_USER_BY_USER_NAME = new WikiCache<String, WikiUser>("org.jamwiki.db.AnsiDataHandler.CACHE_USER_BY_USER_NAME");
-	private static final WikiCache<String, List<VirtualWiki>> CACHE_VIRTUAL_WIKI_LIST = new WikiCache<String, List<VirtualWiki>>("org.jamwiki.db.AnsiDataHandler.CACHE_VIRTUAL_WIKI_LIST");
-	private static final WikiLogger logger = WikiLogger.getLogger(AnsiDataHandler.class.getName());
+	private static final WikiCache<String, Integer> CACHE_TOPIC_IDS_BY_NAME = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_TOPIC_IDS_BY_NAME");
+	private static final WikiCache<Integer, TopicVersion> CACHE_TOPIC_VERSIONS = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_TOPIC_VERSIONS");
+	private static final WikiCache<String, Map<Object, UserBlock>> CACHE_USER_BLOCKS_ACTIVE = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_USER_BLOCKS_ACTIVE");
+	private static final WikiCache<Integer, WikiUser> CACHE_USER_BY_USER_ID = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_USER_BY_USER_ID");
+	private static final WikiCache<String, WikiUser> CACHE_USER_BY_USER_NAME = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_USER_BY_USER_NAME");
+	private static final WikiCache<String, List<VirtualWiki>> CACHE_VIRTUAL_WIKI_LIST = new WikiCache<>("org.jamwiki.db.AnsiDataHandler.CACHE_VIRTUAL_WIKI_LIST");
 
 	// TODO - remove when the ability to upgrade to 1.3 is deprecated
 	private static final Map<String, String> LEGACY_DATA_HANDLER_MAP = new HashMap<String, String>();
