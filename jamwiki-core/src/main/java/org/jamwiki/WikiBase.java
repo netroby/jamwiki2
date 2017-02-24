@@ -75,23 +75,7 @@ public final class WikiBase {
 	/** Enum indicating where uploaded files are stored. */
 	public static enum UPLOAD_STORAGE { JAMWIKI, DOCROOT, DATABASE }
 
-	static {
-		try {
-			WikiBase.instance = new WikiBase();
-		} catch (Exception e) {
-			logger.error("Failure while initializing WikiBase", e);
-		}
-	}
-
-	/**
-	 * Creates an instance of <code>WikiBase</code>, initializing the default
-	 * data handler instance and search engine instance.
-	 *
-	 * @throws IOException If the instance cannot be instantiated.
-	 */
-	private WikiBase() throws IOException {
-		this.reload();
-	}
+	private WikiBase() {}
 
 	/**
 	 * Get an instance of the current data handler.
