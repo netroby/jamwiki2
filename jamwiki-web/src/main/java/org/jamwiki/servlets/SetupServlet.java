@@ -201,7 +201,7 @@ public class SetupServlet extends JAMWikiServlet {
 	 *
 	 */
 	private WikiUser setAdminUser(HttpServletRequest request) throws Exception {
-		String username = request.getParameter("username");
+		final String username = request.getParameter("username");
 		WikiUser user = new WikiUser(username);
 		user.setCreateIpAddress(ServletUtil.getIpAddress(request));
 		user.setLastLoginIpAddress(ServletUtil.getIpAddress(request));

@@ -32,13 +32,11 @@ import org.jamwiki.utils.WikiLogger;
  *
  * @see org.jamwiki.SearchEngine
  */
-public class WikiBase {
+public final class WikiBase {
 
-	/** Standard logger. */
 	private static final WikiLogger logger = WikiLogger.getLogger(WikiBase.class.getName());
-	/** The singleton instance of this class. */
-	private static WikiBase instance = null;
-	/** The data handler that looks after read/write operations. */
+    
+	/** The data handler that performs all database operations. */
 	private static AnsiDataHandler dataHandler = null;
 	/** The search engine instance. */
 	private static SearchEngine searchEngine = null;
@@ -46,7 +44,8 @@ public class WikiBase {
 	private static JAMWikiParser parserInstance = null;
 
 	/** Cache name for the cache of parsed topic content. */
-	public static final WikiCache<String, String> CACHE_PARSED_TOPIC_CONTENT = new WikiCache<String, String>("org.jamwiki.WikiBase.CACHE_PARSED_TOPIC_CONTENT");
+	public static final WikiCache<String, String> CACHE_PARSED_TOPIC_CONTENT = 
+            new WikiCache<>("org.jamwiki.WikiBase.CACHE_PARSED_TOPIC_CONTENT");
 	/** Default group for registered users. */
 	private static WikiGroup GROUP_REGISTERED_USER = null;
 	/** Data stored using an external database */
@@ -109,6 +108,7 @@ public class WikiBase {
 
 	/**
 	 *
+     * @return 
 	 */
 	public static WikiGroup getGroupRegisteredUser() {
 		if (WikiUtil.isFirstUse() || WikiUtil.isUpgrade()) {
