@@ -130,6 +130,9 @@ public final class WikiBase {
 	 * @return The current parser instance.
 	 */
 	public static JAMWikiParser getParserInstance() {
+        if (WikiBase.parserInstance == null) {
+            WikiBase.parserInstance = WikiUtil.parserInstance();
+        }
 		return WikiBase.parserInstance;
 	}
 
@@ -139,6 +142,9 @@ public final class WikiBase {
 	 * @return The current search engine instance.
 	 */
 	public static SearchEngine getSearchEngine() {
+        if (WikiBase.searchEngine == null) {
+            WikiBase.searchEngine = WikiUtil.searchEngineInstance();
+        }
 		return WikiBase.searchEngine;
 	}
 
