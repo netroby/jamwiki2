@@ -30,6 +30,9 @@ import org.jamwiki.Environment;
 /**
  * Implement utility functions that interact with the cache and provide the
  * infrastructure for storing and retrieving items from the cache.
+ * @author Christian P. Lerch (additon and changes)
+ * @param <K> type for keys
+ * @param <V> type for values
  */
 public class WikiCache<K, V> {
 
@@ -87,6 +90,7 @@ public class WikiCache<K, V> {
 
 	/**
 	 * Return the name of the cache that this instance was configured with.
+     * @return 
 	 */
 	public String getCacheName() {
 		return this.cacheName;
@@ -125,6 +129,8 @@ public class WikiCache<K, V> {
 	/**
 	 * Return <code>true</code> if the key is in the specified cache, even
 	 * if the value associated with that key is <code>null</code>.
+     * @param key
+     * @return 
 	 */
 	public boolean isKeyInCache(K key) {
 		return this.getCache().isKeyInCache(key);
@@ -161,6 +167,7 @@ public class WikiCache<K, V> {
 	 * Remove a key from the cache in a case-insensitive manner.  This method
 	 * is significantly slower than removeFromCache and should only be used when
 	 * the key values may not be exactly known.
+     * @param key
 	 */
 	public void removeFromCacheCaseInsensitive(String key) {
 		for (Object cacheKey : this.getCache().getKeys()) {
