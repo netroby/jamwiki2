@@ -20,7 +20,9 @@ package org.jamwiki;
  * Custom exception class for JAMWiki errors.  This exception type allows an error
  * message key to be passed back to the front end for display to the user.
  */
-public class WikiException extends Exception {
+public class WikiException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
 
 	private final WikiMessage wikiMessage;
 

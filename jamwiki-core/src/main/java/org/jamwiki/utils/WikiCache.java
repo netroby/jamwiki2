@@ -17,6 +17,7 @@
 package org.jamwiki.utils;
 
 import java.io.File;
+import java.io.IOException;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
@@ -112,7 +113,7 @@ public class WikiCache<K, V> {
 			diskStoreConfiguration.setPath(directory.getPath());
 			configuration.addDiskStore(diskStoreConfiguration);
 			WikiCache.CACHE_MANAGER = new CacheManager(configuration);
-		} catch (Exception e) {
+		} catch (IOException | CacheException e) {
 			logger.error("Failure while initializing cache", e);
 			throw new RuntimeException(e);
 		}

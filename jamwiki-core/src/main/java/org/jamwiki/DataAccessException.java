@@ -22,7 +22,9 @@ import java.sql.SQLException;
  * Custom exception class for JAMWiki data errors.  This class will typically
  * wrap <code>SQLException</code> or other exception types.
  */
-public class DataAccessException extends Exception {
+public class DataAccessException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
 
 	/** SQLException can bury useful info in getNextException(), so add special handling. */
 	private SQLException nextException;

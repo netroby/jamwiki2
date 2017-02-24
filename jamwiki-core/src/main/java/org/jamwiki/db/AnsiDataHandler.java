@@ -114,13 +114,13 @@ public class AnsiDataHandler {
 	 *
 	 */
 	public AnsiDataHandler() {
-		this.queryHandler = this.queryHandlerInstance();
+		queryHandler = queryHandlerInstance();
 	}
 
 	/**
 	 *
 	 */
-	private void addCategories(List<Category> categoryList, int topicId, Connection conn) throws DataAccessException, WikiException {
+	private void addCategories(List<Category> categoryList, int topicId, Connection conn) {
 		int virtualWikiId = -1;
 		for (Category category : categoryList) {
 			virtualWikiId = this.lookupVirtualWikiId(category.getVirtualWiki());
@@ -147,7 +147,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addLogItem(LogItem logItem, Connection conn) throws DataAccessException, WikiException {
+	private void addLogItem(LogItem logItem, Connection conn) {
 		int virtualWikiId = this.lookupVirtualWikiId(logItem.getVirtualWiki());
 		this.dataValidator.validateLogItem(logItem);
 		try {
@@ -160,7 +160,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addRecentChange(RecentChange change, Connection conn) throws DataAccessException, WikiException {
+	private void addRecentChange(RecentChange change, Connection conn) {
 		int virtualWikiId = this.lookupVirtualWikiId(change.getVirtualWiki());
 		this.dataValidator.validateRecentChange(change);
 		try {
@@ -173,7 +173,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addTopic(Topic topic, Connection conn) throws DataAccessException, WikiException {
+	private void addTopic(Topic topic, Connection conn) {
 		int virtualWikiId = this.lookupVirtualWikiId(topic.getVirtualWiki());
 		try {
 			this.dataValidator.validateTopic(topic);
@@ -211,7 +211,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addTopicVersions(Topic topic, List<TopicVersion> topicVersions, Connection conn) throws DataAccessException, WikiException {
+	private void addTopicVersions(Topic topic, List<TopicVersion> topicVersions, Connection conn) {
 		for (TopicVersion topicVersion : topicVersions) {
 			topicVersion.setTopicId(topic.getTopicId());
 			topicVersion.initializeVersionParams(topic);
@@ -227,7 +227,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addUserBlock(UserBlock userBlock, Connection conn) throws DataAccessException, WikiException {
+	private void addUserBlock(UserBlock userBlock, Connection conn) {
 		try {
 			this.dataValidator.validateUserBlock(userBlock);
 			this.queryHandler().insertUserBlock(userBlock, conn);
@@ -239,7 +239,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addUserDetails(WikiUserDetails userDetails, Connection conn) throws DataAccessException, WikiException {
+	private void addUserDetails(WikiUserDetails userDetails, Connection conn) {
 		this.dataValidator.validateUserDetails(userDetails);
 		try {
 			this.queryHandler().insertUserDetails(userDetails, conn);
@@ -251,7 +251,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addVirtualWiki(VirtualWiki virtualWiki, Connection conn) throws DataAccessException, WikiException {
+	private void addVirtualWiki(VirtualWiki virtualWiki, Connection conn) {
 		try {
 			this.dataValidator.validateVirtualWiki(virtualWiki);
 			this.queryHandler().insertVirtualWiki(virtualWiki, conn);
@@ -263,7 +263,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addWatchlistEntry(int virtualWikiId, String topicName, int userId, Connection conn) throws DataAccessException, WikiException {
+	private void addWatchlistEntry(int virtualWikiId, String topicName, int userId, Connection conn) {
 		this.dataValidator.validateWatchlistEntry(topicName);
 		try {
 			this.queryHandler().insertWatchlistEntry(virtualWikiId, topicName, userId, conn);
@@ -275,7 +275,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addWikiFile(WikiFile wikiFile, Connection conn) throws DataAccessException, WikiException {
+	private void addWikiFile(WikiFile wikiFile, Connection conn) {
 		try {
 			int virtualWikiId = this.lookupVirtualWikiId(wikiFile.getVirtualWiki());
 			this.dataValidator.validateWikiFile(wikiFile);
@@ -288,7 +288,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addWikiFileVersion(WikiFileVersion wikiFileVersion, Connection conn) throws DataAccessException, WikiException {
+	private void addWikiFileVersion(WikiFileVersion wikiFileVersion, Connection conn) {
 		try {
 			this.dataValidator.validateWikiFileVersion(wikiFileVersion);
 			this.queryHandler().insertWikiFileVersion(wikiFileVersion, conn);
@@ -300,7 +300,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addWikiGroup(WikiGroup group, Connection conn) throws DataAccessException, WikiException {
+	private void addWikiGroup(WikiGroup group, Connection conn) {
 		try {
 			this.dataValidator.validateWikiGroup(group);
 			this.queryHandler().insertWikiGroup(group, conn);
@@ -312,7 +312,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void addWikiUser(WikiUser user, Connection conn) throws DataAccessException, WikiException {
+	private void addWikiUser(WikiUser user, Connection conn) {
 		try {
 			this.dataValidator.validateWikiUser(user);
 			this.queryHandler().insertWikiUser(user, conn);
@@ -493,7 +493,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the topic information is invalid.
 	 */
-	public void deleteTopic(Topic topic, TopicVersion topicVersion) throws DataAccessException, WikiException {
+	public void deleteTopic(Topic topic, TopicVersion topicVersion) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -1790,7 +1790,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the topic information is invalid.
 	 */
-	public void moveTopic(Topic fromTopic, String destination, WikiUser user, String ipAddress, String moveComment) throws DataAccessException, WikiException {
+	public void moveTopic(Topic fromTopic, String destination, WikiUser user, String ipAddress, String moveComment) {
 		// set up the version record to record the topic move
 		TopicVersion fromVersion = new TopicVersion(user, ipAddress, moveComment, fromTopic.getTopicContent(), 0);
 		fromVersion.setEditType(TopicVersion.EDIT_MOVE);
@@ -1887,7 +1887,7 @@ public class AnsiDataHandler {
 	 * @param ipAddress The IP address of the user deleting the topic version.
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 */
-	public void purgeTopicVersion(Topic topic, int topicVersionId, WikiUser user, String ipAddress) throws DataAccessException, WikiException {
+	public void purgeTopicVersion(Topic topic, int topicVersionId, WikiUser user, String ipAddress) {
 		// 1. get the topic version record.  if no such record exists
 		// throw an exception.
 		TopicVersion topicVersion = this.lookupTopicVersion(topicVersionId);
@@ -2032,7 +2032,8 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if a setup failure occurs.
 	 */
-	public void setup(Locale locale, WikiUser user, String username, String encryptedPassword) throws DataAccessException, WikiException {
+	public void setup(Locale locale, WikiUser user, String username, String encryptedPassword) 
+            throws DataAccessException {
 		WikiDatabase.initialize();
 		// determine if database exists
 		Connection conn = null;
@@ -2043,7 +2044,7 @@ public class AnsiDataHandler {
 			stmt.executeQuery(this.queryHandler().existenceValidationQuery());
 			return;
 		} catch (SQLException e) {
-			// database not yet set up
+			logger.error("Data source not yet setup correctly", e);
 		} finally {
 			DatabaseConnection.closeConnection(conn, stmt);
 			// explicitly null the variable to improve garbage collection.
@@ -2068,7 +2069,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if a setup failure occurs.
 	 */
-	public void setupSpecialPages(Locale locale, WikiUser user, VirtualWiki virtualWiki) throws DataAccessException, WikiException {
+	public void setupSpecialPages(Locale locale, WikiUser user, VirtualWiki virtualWiki) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2103,7 +2104,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the topic information is invalid.
 	 */
-	public void undeleteTopic(Topic topic, TopicVersion topicVersion) throws DataAccessException, WikiException {
+	public void undeleteTopic(Topic topic, TopicVersion topicVersion) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2139,7 +2140,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the topic information is invalid.
 	 */
-	public void updateSpecialPage(Locale locale, String virtualWiki, String topicName, String userDisplay) throws DataAccessException, WikiException {
+	public void updateSpecialPage(Locale locale, String virtualWiki, String topicName, String userDisplay) {
 		logger.info("Updating special page " + virtualWiki + " / " + topicName);
 		TransactionStatus status = null;
 		try {
@@ -2169,7 +2170,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void updateTopic(Topic topic, Connection conn) throws DataAccessException, WikiException {
+	private void updateTopic(Topic topic, Connection conn) {
 		int virtualWikiId = this.lookupVirtualWikiId(topic.getVirtualWiki());
 		this.dataValidator.validateTopic(topic);
 		try {
@@ -2182,7 +2183,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void updateUserBlock(UserBlock userBlock, Connection conn) throws DataAccessException, WikiException {
+	private void updateUserBlock(UserBlock userBlock, Connection conn) {
 		this.dataValidator.validateUserBlock(userBlock);
 		try {
 			this.queryHandler().updateUserBlock(userBlock, conn);
@@ -2194,7 +2195,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void updateUserDetails(WikiUserDetails userDetails, Connection conn) throws DataAccessException, WikiException {
+	private void updateUserDetails(WikiUserDetails userDetails, Connection conn) {
 		this.dataValidator.validateUserDetails(userDetails);
 		try {
 			this.queryHandler().updateUserDetails(userDetails, conn);
@@ -2206,7 +2207,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void updateVirtualWiki(VirtualWiki virtualWiki, Connection conn) throws DataAccessException, WikiException {
+	private void updateVirtualWiki(VirtualWiki virtualWiki, Connection conn) {
 		this.dataValidator.validateVirtualWiki(virtualWiki);
 		try {
 			this.queryHandler().updateVirtualWiki(virtualWiki, conn);
@@ -2218,7 +2219,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void updateWikiFile(WikiFile wikiFile, Connection conn) throws DataAccessException, WikiException {
+	private void updateWikiFile(WikiFile wikiFile, Connection conn) {
 		int virtualWikiId = this.lookupVirtualWikiId(wikiFile.getVirtualWiki());
 		this.dataValidator.validateWikiFile(wikiFile);
 		try {
@@ -2231,7 +2232,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void updateWikiGroup(WikiGroup group, Connection conn) throws DataAccessException, WikiException {
+	private void updateWikiGroup(WikiGroup group, Connection conn) {
 		this.dataValidator.validateWikiGroup(group);
 		try {
 			this.queryHandler().updateWikiGroup(group, conn);
@@ -2243,7 +2244,7 @@ public class AnsiDataHandler {
 	/**
 	 *
 	 */
-	private void updateWikiUser(WikiUser user, Connection conn) throws DataAccessException, WikiException {
+	private void updateWikiUser(WikiUser user, Connection conn) {
 		this.dataValidator.validateWikiUser(user);
 		try {
 			this.queryHandler().updateWikiUser(user, conn);
@@ -2252,7 +2253,7 @@ public class AnsiDataHandler {
 		}
 	}
 
-	public void updatePwResetChallengeData(WikiUser user) throws DataAccessException {
+	public void updatePwResetChallengeData(WikiUser user) {
 		try {
 			this.queryHandler().updatePwResetChallengeData(user);
 		}
@@ -2287,7 +2288,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the configuration information is invalid.
 	 */
-	public void writeConfiguration(Map<String, String> configuration) throws DataAccessException, WikiException {
+	public void writeConfiguration(Map<String, String> configuration) {
 		this.dataValidator.validateConfiguration(configuration);
 		TransactionStatus status = null;
 		try {
@@ -2317,7 +2318,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the file information is invalid.
 	 */
-	public void writeFile(WikiFile wikiFile, WikiFileVersion wikiFileVersion, ImageData imageData) throws DataAccessException, WikiException {
+	public void writeFile(WikiFile wikiFile, WikiFileVersion wikiFileVersion, ImageData imageData) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2359,7 +2360,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the interwiki information is invalid.
 	 */
-	public void writeInterwiki(Interwiki interwiki) throws DataAccessException, WikiException {
+	public void writeInterwiki(Interwiki interwiki) {
 		interwiki.validate();
 		TransactionStatus status = null;
 		try {
@@ -2384,7 +2385,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the namespace information is invalid.
 	 */
-	public void writeNamespace(Namespace namespace) throws DataAccessException, WikiException {
+	public void writeNamespace(Namespace namespace) {
 		this.dataValidator.validateNamespace(namespace);
 		TransactionStatus status = null;
 		try {
@@ -2409,7 +2410,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the namespace information is invalid.
 	 */
-	public void writeNamespaceTranslations(List<Namespace> namespaces, String virtualWiki) throws DataAccessException, WikiException {
+	public void writeNamespaceTranslations(List<Namespace> namespaces, String virtualWiki) {
 		int virtualWikiId = this.lookupVirtualWikiId(virtualWiki);
 		for (Namespace namespace : namespaces) {
 			this.dataValidator.validateNamespaceTranslation(namespace, virtualWiki);
@@ -2439,7 +2440,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the role information is invalid.
 	 */
-	public void writeRole(Role role, boolean update) throws DataAccessException, WikiException {
+	public void writeRole(Role role, boolean update) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2472,7 +2473,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the role information is invalid.
 	 */
-	public void writeRoleMapGroup(int groupId, List<String> roles) throws DataAccessException, WikiException {
+	public void writeRoleMapGroup(int groupId, List<String> roles) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2505,7 +2506,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the role information is invalid.
 	 */
-	public void writeRoleMapUser(String username, List<String> roles) throws DataAccessException, WikiException {
+	public void writeRoleMapUser(String username, List<String> roles) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2547,7 +2548,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the topic information is invalid.
 	 */
-	public void writeTopic(Topic topic, TopicVersion topicVersion, Map<String, String> categories, List<String> links) throws DataAccessException, WikiException {
+	public void writeTopic(Topic topic, TopicVersion topicVersion, Map<String, String> categories, List<String> links) {
 		long start = System.currentTimeMillis();
 		LinkUtil.validateTopicName(topic.getVirtualWiki(), topic.getName(), false);
 		TransactionStatus status = null;
@@ -2644,7 +2645,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the topic version information is invalid.
 	 */
-	public void writeTopicVersions(Topic topic, List<TopicVersion> topicVersions) throws DataAccessException, WikiException {
+	public void writeTopicVersions(Topic topic, List<TopicVersion> topicVersions) {
 		if (topic == null || topicVersions == null) {
 			logger.warn("Attempt to call writeTopicVersions() with null topic or topic version list");
 			return;
@@ -2671,7 +2672,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the user block information is invalid.
 	 */
-	public void writeUserBlock(UserBlock userBlock) throws DataAccessException, WikiException {
+	public void writeUserBlock(UserBlock userBlock) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2715,7 +2716,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the virtual wiki information is invalid.
 	 */
-	public void writeVirtualWiki(VirtualWiki virtualWiki) throws DataAccessException, WikiException {
+	public void writeVirtualWiki(VirtualWiki virtualWiki) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2754,7 +2755,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the watchlist information is invalid.
 	 */
-	public void writeWatchlistEntry(Watchlist watchlist, String virtualWiki, String topicName, int userId) throws DataAccessException, WikiException {
+	public void writeWatchlistEntry(Watchlist watchlist, String virtualWiki, String topicName, int userId) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2798,7 +2799,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the group information is invalid.
 	 */
-	public void writeWikiGroup(WikiGroup group) throws DataAccessException, WikiException {
+	public void writeWikiGroup(WikiGroup group) {
 		TransactionStatus status = null;
 		try {
 			status = DatabaseConnection.startTransaction();
@@ -2875,7 +2876,7 @@ public class AnsiDataHandler {
 	 * @throws DataAccessException Thrown if any error occurs during method execution.
 	 * @throws WikiException Thrown if the user information is invalid.
 	 */
-	public void writeWikiUser(WikiUser user, String username, String encryptedPassword) throws DataAccessException, WikiException {
+	public void writeWikiUser(WikiUser user, String username, String encryptedPassword) {
 		WikiUtil.validateUserName(user.getUsername());
 		TransactionStatus status = null;
 		Connection conn = null;

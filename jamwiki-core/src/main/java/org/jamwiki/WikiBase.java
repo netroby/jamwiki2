@@ -117,8 +117,8 @@ public class WikiBase {
 		if (WikiBase.GROUP_REGISTERED_USER == null) {
 			try {
 				WikiBase.GROUP_REGISTERED_USER = WikiBase.getDataHandler().lookupWikiGroup(WikiGroup.GROUP_REGISTERED_USER);
-			} catch (Exception e) {
-				throw new RuntimeException("Unable to retrieve registered users group", e);
+			} catch (DataAccessException e) {
+				throw new DataAccessException("Unable to retrieve registered users group", e);
 			}
 		}
 		return WikiBase.GROUP_REGISTERED_USER;
@@ -146,11 +146,16 @@ public class WikiBase {
 	 * Reload the data handler, user handler, and other basic wiki
 	 * data structures.
 	 */
-	public static void reload() throws IOException {
+	public static void reload() {
 		WikiConfiguration.reset();
 		WikiBase.dataHandler = new AnsiDataHandler();
 		if (WikiBase.searchEngine != null) {
-			WikiBase.searchEngine.shutdown();
+            try {
+                WikiBase.searchEngine.shutdown();
+            } catch (IOException ex) {
+                logger.error("Fatal error during search engine shutdown", ex);
+                throw new RuntimeException(ex);
+            }
 		}
 		WikiBase.searchEngine = WikiUtil.searchEngineInstance();
 		WikiBase.parserInstance = WikiUtil.parserInstance();
@@ -167,13 +172,12 @@ public class WikiBase {
 	 * @param username The admin user's username (login).
 	 * @param encryptedPassword The admin user's encrypted password.  This value
 	 *  is only required when creating a new admin user.
-	 * @throws DataAccessException Thrown if an error occurs during re-initialization.
-	 * @throws IOException Thrown if an error occurs during re-initialization.
+	 * @throws DataAccessException Thrown if an error occurs during re-initialization..
 	 * @throws WikiException Thrown if an error occurs during re-initialization.
 	 */
-	public static void reset(Locale locale, WikiUser user, String username, String encryptedPassword) throws DataAccessException, IOException, WikiException {
-		WikiBase.instance = new WikiBase();
+	public static void reset(Locale locale, WikiUser user, String username, String encryptedPassword) {
 		WikiCache.initialize();
-		WikiBase.dataHandler.setup(locale, user, username, encryptedPassword);
+        WikiBase.dataHandler = null;
+		WikiBase.getDataHandler().setup(locale, user, username, encryptedPassword);
 	}
 }

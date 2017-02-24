@@ -495,8 +495,8 @@ public final class Environment {
 			// being changed
 			WikiBase.getDataHandler().writeConfiguration(propertiesToMap(getInstance()));
 		} catch (WikiException | IOException | DataAccessException e) {
-			//throw new WikiException(new WikiMessage("error.unknown", e.getMessage()));
             log.error("Error while saving configuration: " + e.toString());
+			throw new WikiException(new WikiMessage("error.unknown", e.getMessage()));
 		}
 	}
 
