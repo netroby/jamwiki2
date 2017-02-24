@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.jamwiki.db.QueryHandler;
 import org.jamwiki.utils.ResourceUtil;
@@ -37,8 +38,8 @@ import org.jamwiki.utils.WikiLogger;
  */
 public final class Environment {
 	private static final WikiLogger log = WikiLogger.getLogger(Environment.class.getName());
-
-	public static final String PROP_BASE_COOKIE_EXPIRE = "cookie-expire";
+    
+    public static final String PROP_BASE_COOKIE_EXPIRE = "cookie-expire";
 	public static final String PROP_BASE_DEFAULT_TOPIC = "default-topic";
 	public static final String PROP_BASE_FILE_DIR = "homeDir";
 	public static final String PROP_BASE_INITIALIZED = "props-initialized";
@@ -134,9 +135,6 @@ public final class Environment {
 	public static final String PROP_TOPIC_USE_PREVIEW = "use-preview";
 	public static final String PROP_TOPIC_USE_SHOW_CHANGES = "use-show-changes";
 	public static final String PROP_VIRTUAL_WIKI_DEFAULT = "virtual-wiki-default";
-	// Lookup properties file location from system properties first.
-	private static final String PROPERTY_FILE_NAME = System.getProperty("jamwiki.property.file", "jamwiki.properties");
-
 	public static final String PROP_ROLE_ADMIN = "role-admin";
 	public static final String PROP_ROLE_ANONYMOUS = "role-anonymous";
 	public static final String PROP_ROLE_EDIT_EXISTING = "role-edit-existing";
@@ -150,7 +148,12 @@ public final class Environment {
 	public static final String PROP_ROLE_UPLOAD = "role-upload";
 	public static final String PROP_ROLE_VIEW = "role-view";
 	public static final String PROP_ROLE_REGISTER = "role-register";
+    public static final String PROP_ADMIN_USER = "admin-user";
+    public static final String PROP_ADMIN_PWD = "admin-pwd";
     
+	// Lookup properties file location from system properties first.
+	private static final String PROPERTY_FILE_NAME = System.getProperty("jamwiki.property.file", "jamwiki.properties");
+
     private static final String BOOL_TRUE = Boolean.TRUE.toString();
     private static final String BOOL_FALSE = Boolean.FALSE.toString();
 
@@ -169,7 +172,6 @@ public final class Environment {
 		if ("true".equals(System.getProperty("jamwiki.override.file.properties"))) {
 			overrideFromSystemProperties();
 		}
-        saveConfiguration();
 		log.debug("JAMWiki properties initialized: " + props.toString());
 	}
 
@@ -195,36 +197,68 @@ public final class Environment {
 	 * Convert a Properties object to a Map object.
 	 */
 	private static Map<String, String> propertiesToMap(Properties properties) {
-		Map<String, String> map = new HashMap<>();
-		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-			map.put(entry.getKey().toString(), entry.getValue().toString());
-		}
-		return map;
+        return (Map<String, String>)(Map<?, ?>)properties;
 	}
+
+    /**
+     * Check if all required properties without defaults are set
+     * @return true if all required properties are set (i.e. not empty)
+     */
+    public static boolean isCompleted() {
+        Properties env = getInstance();
+        if (StringUtils.isBlank(env.getProperty(PROP_ADMIN_USER))) return false;
+        if (StringUtils.isBlank(env.getProperty(PROP_ADMIN_PWD))) return false;     // blank pwd not allowed!
+        if (StringUtils.isBlank(env.getProperty(PROP_BASE_FILE_DIR))) return false;
+        if (StringUtils.isBlank(env.getProperty(PROP_FILE_DIR_FULL_PATH))) return false;
+        if (StringUtils.isBlank(env.getProperty(PROP_FILE_DIR_RELATIVE_PATH))) return false;
+        if (StringUtils.isBlank(env.getProperty(PROP_SERVER_URL))) return false;
+        if (env.getProperty(PROP_BASE_PERSISTENCE_TYPE).equals(WikiBase.PERSISTENCE_EXTERNAL)) {
+            if (StringUtils.isBlank(env.getProperty(PROP_DB_DRIVER))) return false;
+            if (StringUtils.isBlank(env.getProperty(PROP_DB_URL))) return false;
+            if (StringUtils.isBlank(env.getProperty(PROP_DB_USERNAME))) return false;
+            if (StringUtils.isBlank(env.getProperty(PROP_DB_PASSWORD))) return false;
+        }
+        return true;
+    }
 
 	/**
 	 * Initialize the default property values.
 	 */
 	private void initDefaultProperties() {
 		defaults = new Properties();
-        // no meaningful defaults: must specify
+        
+        // required properties without defaults
 		defaults.setProperty(PROP_BASE_FILE_DIR, "");
 		defaults.setProperty(PROP_FILE_DIR_FULL_PATH, "");
 		defaults.setProperty(PROP_FILE_DIR_RELATIVE_PATH, "");
-
+		defaults.setProperty(PROP_SERVER_URL, "");
+        
+        // required properties with defaults
+		defaults.setProperty(PROP_FILE_UPLOAD_STORAGE, WikiBase.UPLOAD_STORAGE.DOCROOT.toString());
 		defaults.setProperty(PROP_BASE_PERSISTENCE_TYPE, WikiBase.PERSISTENCE_INTERNAL);
+		defaults.setProperty(PROP_DB_TYPE, QueryHandler.QUERY_HANDLER_HSQL);
+
+        // conditionally required properties without defaults
+		defaults.setProperty(PROP_DB_DRIVER, "");
+		defaults.setProperty(PROP_DB_URL, "");
+		defaults.setProperty(PROP_DB_USERNAME, "");
+		defaults.setProperty(PROP_DB_PASSWORD, "");
+        
+        // optional properties without defaults
+		defaults.setProperty(PROP_BASE_META_DESCRIPTION, "");
+		defaults.setProperty(PROP_EMAIL_SMTP_HOST,"");
+		defaults.setProperty(PROP_EMAIL_SMTP_USERNAME,"");
+		defaults.setProperty(PROP_EMAIL_SMTP_PASSWORD,"");
+		defaults.setProperty(PROP_EMAIL_REPLY_ADDRESS,"");
+		defaults.setProperty(PROP_FILE_SERVER_URL, "");
+
+        // other properties
         defaults.setProperty(PROP_BASE_COOKIE_EXPIRE, "31104000");
 		defaults.setProperty(PROP_BASE_DEFAULT_TOPIC, "StartingPoints");
 		defaults.setProperty(PROP_BASE_INITIALIZED, BOOL_FALSE);
 		defaults.setProperty(PROP_BASE_LOGO_IMAGE, "logo.gif");
-		defaults.setProperty(PROP_BASE_META_DESCRIPTION, "");
 		defaults.setProperty(PROP_BASE_SEARCH_ENGINE, SearchEngine.SEARCH_ENGINE_LUCENE);
 		defaults.setProperty(PROP_BASE_WIKI_VERSION, "0.0.0");
-		defaults.setProperty(PROP_DB_DRIVER, "");
-		defaults.setProperty(PROP_DB_PASSWORD, "");
-		defaults.setProperty(PROP_DB_TYPE, QueryHandler.QUERY_HANDLER_HSQL);
-		defaults.setProperty(PROP_DB_URL, "");
-		defaults.setProperty(PROP_DB_USERNAME, "");
 		defaults.setProperty(PROP_DBCP_MAX_ACTIVE, "15");
 		defaults.setProperty(PROP_DBCP_MAX_IDLE, "15");
 		defaults.setProperty(PROP_DBCP_MAX_OPEN_PREPARED_STATEMENTS, "20");
@@ -238,11 +272,7 @@ public final class Environment {
 		defaults.setProperty(PROP_DBCP_WHEN_EXHAUSTED_ACTION, "0");  //org.apache.commons.pool.impl.GenericObjectPool.WHEN_EXHAUSTED_GROW
 		defaults.setProperty(PROP_EMAIL_SMTP_ENABLE,BOOL_FALSE);
 		defaults.setProperty(PROP_EMAIL_SMTP_REQUIRES_AUTH,BOOL_FALSE);
-		defaults.setProperty(PROP_EMAIL_SMTP_USERNAME,"");
-		defaults.setProperty(PROP_EMAIL_SMTP_PASSWORD,"");
 		defaults.setProperty(PROP_EMAIL_SMTP_USE_SSL, BOOL_FALSE);
-		defaults.setProperty(PROP_EMAIL_REPLY_ADDRESS,"");
-		defaults.setProperty(PROP_EMAIL_SMTP_HOST,"");
 		defaults.setProperty(PROP_EMAIL_SMTP_PORT,"25");
 		defaults.setProperty(PROP_EMAIL_ADDRESS_SEPARATOR,";");
 		defaults.setProperty(PROP_EMAIL_DEFAULT_CONTENT_TYPE,"text/plain");
@@ -255,8 +285,6 @@ public final class Environment {
 		defaults.setProperty(PROP_FILE_BLACKLIST, "bat,bin,exe,htm,html,js,jsp,php,sh");
 		defaults.setProperty(PROP_FILE_BLACKLIST_TYPE, String.valueOf(WikiBase.UPLOAD_BLACKLIST));
 		defaults.setProperty(PROP_FILE_MAX_FILE_SIZE, "5000000");   // size is in bytes
-		defaults.setProperty(PROP_FILE_SERVER_URL, "");
-		defaults.setProperty(PROP_FILE_UPLOAD_STORAGE, WikiBase.UPLOAD_STORAGE.JAMWIKI.toString());
 		defaults.setProperty(PROP_FILE_WHITELIST, "bmp,gif,jpeg,jpg,pdf,png,properties,svg,txt,zip");
 		defaults.setProperty(PROP_HONEYPOT_ACCESS_KEY, "");
 		defaults.setProperty(PROP_HONEYPOT_FILTER_ENABLED, BOOL_FALSE);
@@ -293,7 +321,6 @@ public final class Environment {
 		defaults.setProperty(PROP_RECENT_CHANGES_NUM, "100");
 		defaults.setProperty(PROP_RSS_ALLOWED, BOOL_TRUE);
 		defaults.setProperty(PROP_RSS_TITLE, "Wiki Recent Changes");
-		defaults.setProperty(PROP_SERVER_URL, "");
 		defaults.setProperty(PROP_SHARED_UPLOAD_VIRTUAL_WIKI, "");
 		defaults.setProperty(PROP_SITE_NAME, "JamWiki2");
 		defaults.setProperty(PROP_TOPIC_EDITOR, "toolbar");     // FIXME - hard coding
@@ -317,19 +344,6 @@ public final class Environment {
 	}
 
 	/**
-	 * Get the value of a boolean property.
-	 * Returns <code>true</code> if the property is equal, ignoring case,
-	 * to the string "true".
-	 * Returns false in all other cases (eg: "false", "yes", "1")
-	 *
-	 * @param name The name of the property whose value is to be retrieved.
-	 * @return The value of the property.
-	 */
-	public static boolean getBooleanValue(String name) {
-		return Boolean.valueOf(getValue(name));
-	}
-
-	/**
 	 * Return an instance of the current properties object.  The property instance
 	 * returned should not be directly modified.
 	 *
@@ -341,6 +355,19 @@ public final class Environment {
 			INSTANCE = new Environment();
 		}
 		return INSTANCE.props;
+	}
+
+	/**
+	 * Get the value of a boolean property.
+	 * Returns <code>true</code> if the property is equal, ignoring case,
+	 * to the string "true".
+	 * Returns false in all other cases (eg: "false", "yes", "1")
+	 *
+	 * @param name The name of the property whose value is to be retrieved.
+	 * @return The value of the property.
+	 */
+	public static boolean getBooleanValue(String name) {
+		return Boolean.valueOf(getValue(name));
 	}
 
 	/**
@@ -393,7 +420,7 @@ public final class Environment {
 	public static boolean isInitialized() {
 		return getBooleanValue(Environment.PROP_BASE_INITIALIZED);
 	}
-
+    
 	/**
 	 * Given a property file name, load the property file and return an object
 	 * representing the property values.

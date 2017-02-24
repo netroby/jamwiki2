@@ -93,6 +93,9 @@ public class SetupServlet extends JAMWikiServlet {
 				}
 			} else if (!StringUtils.isBlank(request.getParameter("function")) && initialize(request, next, pageInfo)) {
 				ServletUtil.redirect(next, virtualWiki.getName(), virtualWiki.getRootTopicName());
+            } else if (Environment.isCompleted()) {
+                initializeBypassSetup(request);
+                ServletUtil.redirect(next, virtualWiki.getName(), virtualWiki.getRootTopicName());
 			} else {
 				view(request, next, pageInfo);
 			}
@@ -101,28 +104,32 @@ public class SetupServlet extends JAMWikiServlet {
 		}
 		return next;
 	}
-
-	/**
-	 *
-	 */
-	private void handleSetupError(HttpServletRequest request, ModelAndView next, WikiPageInfo pageInfo, Exception e) {
-		// reset properties
-		Environment.setBooleanValue(Environment.PROP_BASE_INITIALIZED, false);
-		if (!(e instanceof WikiException)) {
-			logger.error("Setup error", e);
-		}
-		try {
-			this.view(request, next, pageInfo);
-		} catch (Exception ex) {
-			logger.error("Unable to set up page view object for setup.jsp", ex);
-		}
-		if (e instanceof WikiException) {
-			WikiException we = (WikiException)e;
-			next.addObject("messageObject", we.getWikiMessage());
-		} else {
-			next.addObject("messageObject", new WikiMessage("error.unknown", e.getMessage()));
-		}
-	}
+    
+    private void initializeBypassSetup(HttpServletRequest request) {
+		final String adminUser = Environment.getValue(Environment.PROP_ADMIN_USER);
+		final String adminInitialPwd = Environment.getValue(Environment.PROP_ADMIN_PWD);
+		final String encryptedPwd = Encryption.encrypt(adminInitialPwd);
+		final WikiUser user = new WikiUser(adminUser);
+		user.setCreateIpAddress(ServletUtil.getIpAddress(request));
+		user.setLastLoginIpAddress(ServletUtil.getIpAddress(request));
+		Environment.setBooleanValue(Environment.PROP_BASE_INITIALIZED, true);
+		Environment.setValue(Environment.PROP_BASE_WIKI_VERSION, WikiVersion.CURRENT_WIKI_VERSION);
+        if (Environment.getValue(Environment.PROP_BASE_PERSISTENCE_TYPE).equals(WikiBase.PERSISTENCE_INTERNAL)) {
+            WikiDatabase.setupDefaultDatabase(Environment.getInstance());
+        }
+        try {
+            WikiBase.reset(request.getLocale(), user, adminUser, encryptedPwd);
+            Environment.saveConfiguration();
+            // the setup process does not add new topics to the index (currently)
+            // TODO - remove this once setup uses safe connection handling
+            WikiBase.getSearchEngine().refreshIndex();
+            // force current user credentials to be removed and re-validated.
+            SecurityContextHolder.clearContext();
+        } catch (Exception ex) {
+            logger.error("Fatal error while bypassing setup dialog");
+            throw new RuntimeException(ex);
+        }
+    }
 
 	/**
 	 *
@@ -195,6 +202,28 @@ public class SetupServlet extends JAMWikiServlet {
 			pageInfo.addError(new WikiMessage("error.unknown", e.getMessage()));
 		}
 		return result;
+	}
+
+	/**
+	 *
+	 */
+	private void handleSetupError(HttpServletRequest request, ModelAndView next, WikiPageInfo pageInfo, Exception e) {
+		// reset properties
+		Environment.setBooleanValue(Environment.PROP_BASE_INITIALIZED, false);
+		if (!(e instanceof WikiException)) {
+			logger.error("Setup error", e);
+		}
+		try {
+			this.view(request, next, pageInfo);
+		} catch (Exception ex) {
+			logger.error("Unable to set up page view object for setup.jsp", ex);
+		}
+		if (e instanceof WikiException) {
+			WikiException we = (WikiException)e;
+			next.addObject("messageObject", we.getWikiMessage());
+		} else {
+			next.addObject("messageObject", new WikiMessage("error.unknown", e.getMessage()));
+		}
 	}
 
 	/**
