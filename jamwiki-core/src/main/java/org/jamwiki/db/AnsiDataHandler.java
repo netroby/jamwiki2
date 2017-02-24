@@ -67,6 +67,7 @@ import org.springframework.transaction.TransactionStatus;
 
 /**
  * Default handler for ANSI SQL compatible databases.
+ * @author Christian P. Lerch (additon and changes)
  */
 public class AnsiDataHandler {
 

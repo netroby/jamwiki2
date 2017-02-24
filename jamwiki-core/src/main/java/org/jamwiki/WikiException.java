@@ -1,24 +1,25 @@
-/**
- * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, version 2.1, dated February 1999.
+/*
+ * Copyright (C) 2017 Christian P. Lerch
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the latest version of the GNU Lesser General
- * Public License as published by the Free Software Foundation;
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program (LICENSE.txt); if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jamwiki;
 
 /**
  * Custom exception class for JAMWiki errors.  This exception type allows an error
  * message key to be passed back to the front end for display to the user.
+ * @author Christian P. Lerch (additon and changes)
  */
 public class WikiException extends RuntimeException {
 
