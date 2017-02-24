@@ -87,12 +87,7 @@ public class Encryption {
 			// save the algorithm so that if the user upgrades the JDK they can
 			// still use passwords encrypted with the weaker algorithm
 			Environment.setValue(Environment.PROP_ENCRYPTION_ALGORITHM, "SHA-1");
-			try {
-				Environment.saveConfiguration();
-			} catch (WikiException e) {
-				// FIXME - shouldn't this be better handled ???
-				logger.info("Failure while saving encryption algorithm property", e);
-			}
+			Environment.saveConfiguration();
 		}
 		try {
 			md.update(unencryptedString.getBytes("UTF-8"));
@@ -174,12 +169,7 @@ public class Encryption {
 			// the property might have been unencrypted in the property file, so encrypt, save, and return the value
 			logger.warn("Found unencrypted property file value: " + name + ".  Assuming that this value manually un-encrypted in the property file so re-encrypting and re-saving.");
 			Encryption.setEncryptedProperty(name, value, null);
-			try {
-				Environment.saveConfiguration();
-			} catch (WikiException ex) {
-				logger.error("Failure while saving properties", ex);
-				throw new IllegalStateException("Failure while saving properties");
-			}
+			Environment.saveConfiguration();
 			return value;
 		} catch (UnsupportedEncodingException e) {
 			throw new IllegalStateException("Unsupporting encoding UTF-8");
