@@ -16,46 +16,17 @@
  */
 package org.jamwiki.db;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Properties;
-
-// import org.apache.commons.lang.ObjectUtils.Null;
 import org.apache.commons.lang3.StringUtils;
 import org.jamwiki.Environment;
-import org.jamwiki.model.Category;
-import org.jamwiki.model.GroupMap;
-import org.jamwiki.model.ImageData;
-import org.jamwiki.model.Interwiki;
-import org.jamwiki.model.LogItem;
-import org.jamwiki.model.Namespace;
-import org.jamwiki.model.RecentChange;
-import org.jamwiki.model.Role;
-import org.jamwiki.model.RoleMap;
-import org.jamwiki.model.Topic;
-import org.jamwiki.model.TopicType;
-import org.jamwiki.model.TopicVersion;
-import org.jamwiki.model.UserBlock;
-import org.jamwiki.model.VirtualWiki;
-import org.jamwiki.model.WikiFile;
-import org.jamwiki.model.WikiFileVersion;
-import org.jamwiki.model.WikiGroup;
-import org.jamwiki.model.WikiUser;
-import org.jamwiki.model.WikiUserDetails;
+import org.jamwiki.model.*;
 import org.jamwiki.utils.Pagination;
 import org.jamwiki.utils.WikiLogger;
+
+import java.sql.*;
+import java.text.MessageFormat;
+import java.util.*;
+
+// import org.apache.commons.lang.ObjectUtils.Null;
 
 /**
  * Default implementation of the QueryHandler interface for retrieving, inserting,
