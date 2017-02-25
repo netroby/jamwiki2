@@ -2,12 +2,12 @@
     "docs": [
         {
             "location": "/",
-            "text": "Welcome to JamWiki2\n\u00b6",
+            "text": "Welcome to JamWiki2\n\u00b6\n\n\nJava API Docs",
             "title": "Overview"
         },
         {
             "location": "/#welcome-to-jamwiki2",
-            "text": "",
+            "text": "Java API Docs",
             "title": "Welcome to JamWiki2"
         },
         {
