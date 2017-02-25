@@ -11,6 +11,21 @@
             "title": "Welcome to JamWiki2"
         },
         {
+            "location": "/user-guide/getting-started/",
+            "text": "Getting Started\n\u00b6\n\n\nInstallation\n\u00b6",
+            "title": "Getting Started"
+        },
+        {
+            "location": "/user-guide/getting-started/#getting-started",
+            "text": "",
+            "title": "Getting Started"
+        },
+        {
+            "location": "/user-guide/getting-started/#installation",
+            "text": "",
+            "title": "Installation"
+        },
+        {
             "location": "/about/",
             "text": "About: JamWiki2\n\u00b6\n\n\nHistory\n\u00b6\n\n\nCurrent State\n\u00b6\n\n\nRoadmap\n\u00b6",
             "title": "About"

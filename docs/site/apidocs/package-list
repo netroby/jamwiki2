@@ -1,0 +1,16 @@
+org.jamwiki
+org.jamwiki.authentication
+org.jamwiki.db
+org.jamwiki.mail
+org.jamwiki.migrate
+org.jamwiki.model
+org.jamwiki.parser
+org.jamwiki.parser.bliki
+org.jamwiki.parser.image
+org.jamwiki.search
+org.jamwiki.servlets
+org.jamwiki.taglib
+org.jamwiki.utils
+org.jamwiki.validator
+org.jamwiki.web.model
+org.jamwiki.web.utils
