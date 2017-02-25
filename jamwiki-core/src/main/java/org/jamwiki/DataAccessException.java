@@ -21,7 +21,7 @@ import java.sql.SQLException;
 /**
  * Custom exception class for JAMWiki data errors.  This class will typically
  * wrap <code>SQLException</code> or other exception types.
- * @author Christian P. Lerch (additon and changes)
+ * @author Christian P. Lerch (additions and changes)
  */
 public class DataAccessException extends RuntimeException {
 

@@ -506,7 +506,7 @@ public class ServletUtil {
 	 * Generate a map of key-value pairs consisting of a namespace ID and a
 	 * display label, suitable for use in drop-downs or other namepsace
 	 * selection tools on the front-end.  This method will automatically
-	 * filter out internal namespaces (ie those with ID < 0).
+	 * filter out internal namespaces (ie those with ID &lt; 0).
 	 *
 	 * @param virtualWiki The virtual wiki for the namespace map being
 	 *  retrieved.

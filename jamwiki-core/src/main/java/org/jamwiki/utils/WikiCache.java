@@ -30,7 +30,7 @@ import org.jamwiki.Environment;
 /**
  * Implement utility functions that interact with the cache and provide the
  * infrastructure for storing and retrieving items from the cache.
- * @author Christian P. Lerch (additon and changes)
+ * @author Christian P. Lerch (additions and changes)
  * @param <K> type for keys
  * @param <V> type for values
  */

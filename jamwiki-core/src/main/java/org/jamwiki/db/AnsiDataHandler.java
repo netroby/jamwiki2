@@ -699,7 +699,7 @@ public class AnsiDataHandler {
 	/**
 	 * Return a map of key/map(key/value) pairs containing the defined user preferences
 	 * defaults.  The map returned has the following structure:
-	 * pref_group_key -> Map(pref_key -> pref_value)
+	 * pref_group_key -&gt; Map(pref_key -&gt; pref_value)
 	 * the pref_group_key points to a map of pref key/value pairs that belong to it.
 	 */
 	public Map<String, Map<String, String>> getUserPreferencesDefaults() throws DataAccessException {

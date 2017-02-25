@@ -68,7 +68,7 @@ public class UserPreferencesUtil {
 
 	/**
 	 * The method return a map with the following structure:
-	 * pref_group_key -> Map(pref_key -> Instance of UserPreferenceItem for pref_key)
+	 * pref_group_key -&gt; Map(pref_key -&gt; Instance of UserPreferenceItem for pref_key)
 	 * UserPreferenceItems implements the getters necessary to automate the display of
 	 * user preferences choices in JSTL.
 	 *

@@ -29,7 +29,7 @@ import org.jamwiki.utils.WikiLogger;
  * <code>WikiBase</code> is loaded as a singleton class and provides access
  * to all core wiki structures.  In addition this class provides utility methods
  * for resetting core structures including caches and permissions.
- * @author Christian P. Lerch (additon and changes)
+ * @author Christian P. Lerch (additions and changes)
  * @see org.jamwiki.SearchEngine
  */
 public final class WikiBase {

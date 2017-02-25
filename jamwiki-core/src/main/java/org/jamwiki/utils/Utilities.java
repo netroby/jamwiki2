@@ -232,7 +232,7 @@ public abstract class Utilities {
 
 	/**
 	 * Utility method to help work around XSS attacks when executing request.getQueryString().
-	 * If the query string contains ", <, or > then assume it is malicious and escape.
+	 * If the query string contains &quot;, &lt;, or &gt; then assume it is malicious and escape.
 	 *
 	 * @param request The current servlet request.
 	 * @return The request query string, or an escaped version if it appears to be an XSS

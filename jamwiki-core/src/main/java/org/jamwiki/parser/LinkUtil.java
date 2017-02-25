@@ -144,7 +144,7 @@ public abstract class LinkUtil {
 
 	/**
 	 * Parse a link of the form http://example.com and return the opening tag of the
-	 * form <a href="http://example.com">.
+	 * form &lt;a href="http://example.com"&gt;.
 	 */
 	public static String buildExternalLinkHtml(String link, String cssClass, String linkText) throws ParserException {
 		Matcher matcher = LINK_PROTOCOL_PATTERN.matcher(link);

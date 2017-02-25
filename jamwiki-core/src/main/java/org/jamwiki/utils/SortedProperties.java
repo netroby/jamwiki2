@@ -24,7 +24,7 @@ import java.util.TreeSet;
 
 /**
  * Extend java.util.Properties for having all output sorted by keys.
- * @author Christian P. Lerch (additon and changes)
+ * @author Christian P. Lerch (additions and changes)
  */
 public class SortedProperties extends Properties {
 

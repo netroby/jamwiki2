@@ -49,8 +49,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message at the {@link org.slf4j.Logger#DEBUG} level,
-	 * provided that the current log level is {@link org.slf4j.Logger#DEBUG}
+	 * Log a message at the {@link org.slf4j.Logger} DEBUG level,
+	 * provided that the current log level is {@link org.slf4j.Logger} DEBUG
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
@@ -60,8 +60,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message and an exception at the {@link org.slf4j.Logger#DEBUG}
-	 * level, provided that the current log level is {@link org.slf4j.Logger#DEBUG}
+	 * Log a message and an exception at the {@link org.slf4j.Logger} DEBUG
+	 * level, provided that the current log level is {@link org.slf4j.Logger} DEBUG
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
@@ -72,8 +72,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message at the {@link org.slf4j.Logger#ERROR} level,
-	 * provided that the current log level is {@link org.slf4j.Logger#ERROR}
+	 * Log a message at the {@link org.slf4j.Logger} ERROR level,
+	 * provided that the current log level is {@link org.slf4j.Logger} ERROR
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
@@ -83,8 +83,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message and an exception at the {@link org.slf4j.Logger#ERROR}
-	 * level, provided that the current log level is {@link org.slf4j.Logger#ERROR}
+	 * Log a message and an exception at the {@link org.slf4j.Logger} ERROR
+	 * level, provided that the current log level is {@link org.slf4j.Logger} ERROR
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
@@ -95,8 +95,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message at the {@link org.slf4j.Logger#INFO} level,
-	 * provided that the current log level is {@link org.slf4j.Logger#INFO}
+	 * Log a message at the {@link org.slf4j.Logger} INFO level,
+	 * provided that the current log level is {@link org.slf4j.Logger} INFO
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
@@ -106,8 +106,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message and an exception at the {@link org.slf4j.Logger#INFO}
-	 * level, provided that the current log level is {@link org.slf4j.Logger#INFO}
+	 * Log a message and an exception at the {@link org.slf4j.Logger} INFO
+	 * level, provided that the current log level is {@link org.slf4j.Logger} INFO
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
@@ -118,7 +118,7 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Return <code>true</code> if a log message of level {@link org.slf4j.Logger#DEBUG}
+	 * Return <code>true</code> if a log message of level {@link org.slf4j.Logger} DEBUG
 	 * can be logged.
 	 */
 	public boolean isDebugEnabled() {
@@ -126,7 +126,7 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Return <code>true</code> if a log message of level {@link org.slf4j.Logger#INFO}
+	 * Return <code>true</code> if a log message of level {@link org.slf4j.Logger} INFO
 	 * can be logged.
 	 */
 	public boolean isInfoEnabled() {
@@ -134,7 +134,7 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Return <code>true</code> if a log message of level {@link org.slf4j.Logger#TRACE}
+	 * Return <code>true</code> if a log message of level {@link org.slf4j.Logger} TRACE
 	 * can be logged.
 	 */
 	public boolean isTraceEnabled() {
@@ -142,7 +142,7 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Return <code>true</code> if a log message of level {@link org.slf4j.Logger#WARN}
+	 * Return <code>true</code> if a log message of level {@link org.slf4j.Logger} WARN
 	 * can be logged.
 	 */
 	public boolean isWarnEnabled() {
@@ -150,8 +150,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message at the {@link org.slf4j.Logger#TRACE} level,
-	 * provided that the current log level is {@link org.slf4j.Logger#TRACE}
+	 * Log a message at the {@link org.slf4j.Logger} TRACE level,
+	 * provided that the current log level is {@link org.slf4j.Logger} TRACE
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
@@ -161,8 +161,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message and an exception at the {@link org.slf4j.Logger#TRACE}
-	 * level, provided that the current log level is {@link org.slf4j.Logger#TRACE}
+	 * Log a message and an exception at the {@link org.slf4j.Logger} TRACE
+	 * level, provided that the current log level is {@link org.slf4j.Logger} TRACE
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
@@ -173,8 +173,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message at the {@link org.slf4j.Logger#WARN} level,
-	 * provided that the current log level is {@link org.slf4j.Logger#WARN}
+	 * Log a message at the {@link org.slf4j.Logger} WARN level,
+	 * provided that the current log level is {@link org.slf4j.Logger} WARN
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
@@ -184,8 +184,8 @@ public class WikiLogger {
 	}
 
 	/**
-	 * Log a message and an exception at the {@link org.slf4j.Logger#WARN}
-	 * level, provided that the current log level is {@link org.slf4j.Logger#WARN}
+	 * Log a message and an exception at the {@link org.slf4j.Logger} WARN
+	 * level, provided that the current log level is {@link org.slf4j.Logger} WARN
 	 * or greater.
 	 *
 	 * @param msg The message to be written to the log.
