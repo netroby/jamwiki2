@@ -16,58 +16,26 @@
  */
 package org.jamwiki.db;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jamwiki.*;
+import org.jamwiki.model.*;
+import org.jamwiki.parser.LinkUtil;
+import org.jamwiki.parser.ParserException;
+import org.jamwiki.parser.ParserOutput;
+import org.jamwiki.parser.ParserUtil;
+import org.jamwiki.utils.*;
+import org.springframework.transaction.TransactionStatus;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
-import org.jamwiki.DataAccessException;
-import org.jamwiki.Environment;
-import org.jamwiki.WikiBase;
-import org.jamwiki.WikiException;
-import org.jamwiki.WikiMessage;
-import org.jamwiki.model.Category;
-import org.jamwiki.model.GroupMap;
-import org.jamwiki.model.ImageData;
-import org.jamwiki.model.Interwiki;
-import org.jamwiki.model.LogItem;
-import org.jamwiki.model.Namespace;
-import org.jamwiki.model.RecentChange;
-import org.jamwiki.model.Role;
-import org.jamwiki.model.RoleMap;
-import org.jamwiki.model.Topic;
-import org.jamwiki.model.TopicType;
-import org.jamwiki.model.TopicVersion;
-import org.jamwiki.model.UserBlock;
-import org.jamwiki.model.VirtualWiki;
-import org.jamwiki.model.Watchlist;
-import org.jamwiki.model.WikiFile;
-import org.jamwiki.model.WikiFileVersion;
-import org.jamwiki.model.WikiGroup;
-import org.jamwiki.model.WikiUser;
-import org.jamwiki.model.WikiUserDetails;
-import org.jamwiki.parser.LinkUtil;
-import org.jamwiki.parser.ParserException;
-import org.jamwiki.parser.ParserOutput;
-import org.jamwiki.parser.ParserUtil;
-import org.jamwiki.utils.Encryption;
-import org.jamwiki.utils.Pagination;
-import org.jamwiki.utils.ResourceUtil;
-import org.jamwiki.utils.WikiCache;
-import org.jamwiki.utils.WikiLogger;
-import org.jamwiki.utils.WikiUtil;
-import org.springframework.transaction.TransactionStatus;
+import java.util.*;
 
 /**
  * Default handler for ANSI SQL compatible databases.
- * @author Christian P. Lerch (additon and changes)
+ * @author Christian P. Lerch (additions and changes)
  */
 public class AnsiDataHandler {
 

@@ -16,8 +16,6 @@
  */
 package org.jamwiki.utils;
 
-import java.io.File;
-import java.io.IOException;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.CacheManager;
@@ -26,6 +24,9 @@ import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ConfigurationFactory;
 import net.sf.ehcache.config.DiskStoreConfiguration;
 import org.jamwiki.Environment;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Implement utility functions that interact with the cache and provide the

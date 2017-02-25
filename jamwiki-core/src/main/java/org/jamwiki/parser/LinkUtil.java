@@ -16,26 +16,19 @@
  */
 package org.jamwiki.parser;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jamwiki.DataAccessException;
-import org.jamwiki.Environment;
-import org.jamwiki.WikiBase;
-import org.jamwiki.WikiException;
-import org.jamwiki.WikiMessage;
-import org.jamwiki.model.Interwiki;
-import org.jamwiki.model.Namespace;
-import org.jamwiki.model.Topic;
-import org.jamwiki.model.TopicType;
-import org.jamwiki.model.VirtualWiki;
+import org.jamwiki.*;
+import org.jamwiki.model.*;
 import org.jamwiki.parser.image.ImageUtil;
 import org.jamwiki.utils.PseudoTopicHandler;
 import org.jamwiki.utils.Utilities;
 import org.jamwiki.utils.WikiLogger;
 import org.jamwiki.utils.WikiUtil;
+
+import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * General utility methods for handling both wiki topic links and HTML links.

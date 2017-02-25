@@ -16,23 +16,10 @@
  */
 package org.jamwiki.servlets;
 
-import java.io.File;
-import java.util.LinkedHashMap;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
-import org.jamwiki.DataAccessException;
-import org.jamwiki.Environment;
-import org.jamwiki.WikiBase;
-import org.jamwiki.WikiException;
-import org.jamwiki.WikiMessage;
+import org.jamwiki.*;
 import org.jamwiki.authentication.WikiUserDetailsImpl;
-import org.jamwiki.model.Namespace;
-import org.jamwiki.model.Role;
-import org.jamwiki.model.Topic;
-import org.jamwiki.model.VirtualWiki;
-import org.jamwiki.model.Watchlist;
-import org.jamwiki.model.WikiUser;
+import org.jamwiki.model.*;
 import org.jamwiki.parser.LinkUtil;
 import org.jamwiki.parser.WikiLink;
 import org.jamwiki.utils.Utilities;
@@ -43,6 +30,11 @@ import org.jamwiki.validator.UserBlockValidator;
 import org.jamwiki.validator.UserBlockValidatorInfo;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.util.LinkedHashMap;
 
 /**
  * Provides the infrastructure that is common to all JAMWiki servlets.  Unless

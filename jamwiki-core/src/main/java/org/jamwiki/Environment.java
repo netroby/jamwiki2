@@ -16,12 +16,6 @@
  */
 package org.jamwiki;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -29,6 +23,13 @@ import org.jamwiki.db.QueryHandler;
 import org.jamwiki.utils.ResourceUtil;
 import org.jamwiki.utils.SortedProperties;
 import org.jamwiki.utils.WikiLogger;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * The <code>Environment</code> class is instantiated as a singleton to

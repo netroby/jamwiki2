@@ -16,54 +16,32 @@
  */
 package org.jamwiki.servlets;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jamwiki.DataAccessException;
-import org.jamwiki.Environment;
-import org.jamwiki.WikiBase;
-import org.jamwiki.WikiException;
-import org.jamwiki.WikiMessage;
+import org.jamwiki.*;
 import org.jamwiki.authentication.JAMWikiAuthenticationConstants;
 import org.jamwiki.authentication.WikiUserDetailsImpl;
-import org.jamwiki.model.Category;
-import org.jamwiki.model.Namespace;
-import org.jamwiki.model.Role;
-import org.jamwiki.model.Topic;
-import org.jamwiki.model.TopicType;
-import org.jamwiki.model.VirtualWiki;
-import org.jamwiki.model.Watchlist;
-import org.jamwiki.model.WikiFile;
-import org.jamwiki.model.WikiFileVersion;
-import org.jamwiki.model.WikiUser;
-import org.jamwiki.parser.LinkUtil;
-import org.jamwiki.parser.ParserException;
-import org.jamwiki.parser.ParserInput;
-import org.jamwiki.parser.ParserOutput;
-import org.jamwiki.parser.ParserUtil;
-import org.jamwiki.parser.WikiLink;
+import org.jamwiki.model.*;
+import org.jamwiki.parser.*;
 import org.jamwiki.utils.Pagination;
 import org.jamwiki.utils.Utilities;
 import org.jamwiki.utils.WikiLogger;
 import org.jamwiki.utils.WikiUtil;
 import org.jamwiki.web.utils.SpamFilter;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.util.*;
 
 /**
  * Utility methods useful when processing JAMWiki servlet requests.

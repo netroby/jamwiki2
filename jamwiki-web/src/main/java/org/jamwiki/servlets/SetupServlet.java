@@ -16,20 +16,10 @@
  */
 package org.jamwiki.servlets;
 
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.JavaVersion;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
-import org.jamwiki.DataAccessException;
-import org.jamwiki.Environment;
-import org.jamwiki.WikiBase;
-import org.jamwiki.WikiConfiguration;
-import org.jamwiki.WikiException;
-import org.jamwiki.WikiMessage;
-import org.jamwiki.WikiVersion;
+import org.jamwiki.*;
 import org.jamwiki.db.DatabaseConnection;
 import org.jamwiki.db.WikiDatabase;
 import org.jamwiki.model.VirtualWiki;
@@ -41,6 +31,11 @@ import org.jamwiki.utils.WikiLogger;
 import org.jamwiki.utils.WikiUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Used to handle JAMWiki setup, including setting and validating JAMWiki

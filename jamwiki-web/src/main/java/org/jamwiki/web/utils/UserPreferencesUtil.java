@@ -17,16 +17,17 @@
 
 package org.jamwiki.web.utils;
 
-import java.util.Locale;
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.TreeMap;
 import org.jamwiki.DataAccessException;
 import org.jamwiki.WikiBase;
 import org.jamwiki.WikiConfiguration;
 import org.jamwiki.model.WikiUser;
 import org.jamwiki.utils.DateUtil;
 import org.jamwiki.utils.WikiLogger;
+
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class UserPreferencesUtil {
 
