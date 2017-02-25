@@ -58,7 +58,7 @@ import org.jamwiki.utils.Pagination;
 import org.jamwiki.utils.WikiLogger;
 
 /**
- * Default implementation of the QueryHandler implementation for retrieving, inserting,
+ * Default implementation of the QueryHandler interface for retrieving, inserting,
  * and updating data in the database.  This method uses ANSI SQL and should therefore
  * work with any fully ANSI-compliant database.
  */
