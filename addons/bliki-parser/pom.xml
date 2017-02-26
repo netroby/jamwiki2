@@ -12,29 +12,6 @@
 	<packaging>jar</packaging>
 	<name>Bliki Parser</name>
     
-	<repositories>
-		<repository>
-			<id>info-bliki-repository</id>
-			<url>http://gwtwiki.googlecode.com/svn/maven-repository/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>info-bliki-snapshot-repository</id>
-			<url>http://gwtwiki.googlecode.com/svn/maven-snapshot-repository/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-    
 	<dependencies>
         <dependency>
             <groupId>info.bliki.wiki</groupId>
