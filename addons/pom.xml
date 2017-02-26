@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.github.km-works</groupId>
 		<artifactId>jamwiki2</artifactId>
-		<version>2.0-SNAPSHOT</version>
+		<version>2.0.0</version>
 	</parent>
     
 	<artifactId>addons</artifactId>
