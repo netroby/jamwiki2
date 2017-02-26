@@ -16,6 +16,10 @@
  */
 package org.jamwiki.servlets;
 
+import java.io.File;
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -37,11 +41,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.util.*;
 
 /**
  * Utility methods useful when processing JAMWiki servlet requests.
@@ -535,6 +534,7 @@ public class ServletUtil {
 	 * @return Returns a list of FileItem objects the corresponds to the request.
 	 * @throws WikiException Thrown if any problems occur while processing the request.
 	 */
+    @SuppressWarnings("unchecked")
 	public static List<FileItem> processMultipartRequest(HttpServletRequest request) throws WikiException {
 		File uploadDirectory = WikiUtil.getTempDirectory();
 		if (!uploadDirectory.exists()) {

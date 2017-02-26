@@ -21,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 public class JAMHTMLConverter extends HTMLConverter {
 	private static final int DEFAULT_THUMBNAIL_SIZE = 180;
 
-	private ParserInput fParserInput;
+	private final ParserInput fParserInput;
 
 	public JAMHTMLConverter(ParserInput parserInput) {
 		super();

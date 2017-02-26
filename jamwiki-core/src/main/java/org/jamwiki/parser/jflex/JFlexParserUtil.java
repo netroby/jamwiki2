@@ -339,6 +339,7 @@ public class JFlexParserUtil {
 	 * @return A list of reference objects (never <code>null</code>) for the current topic that
 	 *  is being parsed.
 	 */
+    @SuppressWarnings("unchecked")
 	protected static List<WikiReference> retrieveReferences(ParserInput parserInput) {
 		List<WikiReference> references = (List<WikiReference>)parserInput.getTempParam(WikiReferenceTag.REFERENCES_PARAM);
 		if (references == null) {

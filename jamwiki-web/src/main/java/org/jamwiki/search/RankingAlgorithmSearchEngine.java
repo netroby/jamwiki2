@@ -17,15 +17,14 @@
 package org.jamwiki.search;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.reflect.Method;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
-//- import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLEncoder;
@@ -81,7 +80,7 @@ public class RankingAlgorithmSearchEngine extends LuceneSearchEngine {
 				Class classRH = hitsobject.getClass();
 				classArray = new Class[1];
 				classArray[0] = int.class;
-				Method methodRH_length = classRH.getMethod("length", null);
+				Method methodRH_length = classRH.getMethod("length", (Class[]) null);
 				Method methodRH_docid = classRH.getMethod("docid", classArray);
 				Method methodRH_score = classRH.getMethod("score", classArray);
 				Object lenobject = methodRH_length.invoke(hitsobject);

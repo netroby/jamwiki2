@@ -191,6 +191,7 @@ public class WikiCache<K, V> {
 	 *  cache.
 	 * @return The cached object if one is found, <code>null</code> otherwise.
 	 */
+    @SuppressWarnings("unchecked")
 	public V retrieveFromCache(K key) {
 		Element element = this.getCache().get(key);
 		return (element != null) ? (V)element.getObjectValue() : null;

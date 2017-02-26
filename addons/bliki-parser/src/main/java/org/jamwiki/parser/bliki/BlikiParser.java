@@ -24,10 +24,9 @@ public class BlikiParser extends JFlexParser {
 	@Override
 	public String parseMinimal(ParserInput parserInput, String raw) throws ParserException {
 		long start = System.currentTimeMillis();
-		String output = raw;
 		ParserOutput parserOutput = new ParserOutput();
 		JAMWikiModel wikiModel = new JAMWikiModel(parserInput, parserOutput, "");
-		output = wikiModel.parseTemplates(raw, true);
+		String output = wikiModel.parseTemplates(raw, true);
 		output = output == null ? "" : output;
 		String topicName = (!StringUtils.isBlank(parserInput.getTopicName())) ? parserInput.getTopicName() : null;
 		logger.info("Parse time (parseMinimal) for " + topicName + " (" + ((System.currentTimeMillis() - start) / 1000.000) + " s.)");
@@ -49,7 +48,7 @@ public class BlikiParser extends JFlexParser {
 	@Override
 	public String parseHTML(ParserInput parserInput, ParserOutput parserOutput, String raw) throws ParserException {
 		long start = System.currentTimeMillis();
-		String output = null;
+		String output;
 		if (!StringUtils.isBlank(parserOutput.getRedirect())) {
 			// redirects are parsed differently
 			output = this.parseRedirect(parserInput, parserOutput, raw);

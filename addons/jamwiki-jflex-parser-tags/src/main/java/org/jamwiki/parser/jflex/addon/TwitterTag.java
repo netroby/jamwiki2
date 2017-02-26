@@ -106,7 +106,7 @@ public class TwitterTag implements JFlexCustomTagItem {
 	 * Parse the "Tweet" button.
 	 */
 	private String parseButtonCode(JFlexLexer lexer, Map<String, String> attributes) throws IOException {
-		String[] args = new String[2];
+		Object[] args = new String[2];
 		if (StringUtils.isBlank(attributes.get(ATTRIBUTE_HREF))) {
 			WikiLink wikiLink = new WikiLink(lexer.getParserInput().getContext(), lexer.getParserInput().getVirtualWiki(), lexer.getParserInput().getTopicName());
 			args[0] = LinkUtil.normalize(Environment.getValue(Environment.PROP_SERVER_URL) + wikiLink.toRelativeUrl());

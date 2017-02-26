@@ -197,6 +197,7 @@ public final class Environment {
 	/**
 	 * Convert a Properties object to a Map object.
 	 */
+    @SuppressWarnings("unchekced")
 	private static Map<String, String> propertiesToMap(Properties properties) {
         return (Map<String, String>)(Map<?, ?>)properties;
 	}
