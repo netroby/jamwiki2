@@ -1,6 +1,6 @@
 # JamWiki2 #
 
-JamWiki2 is a Java-based wiki application that uses the same syntax as and offers many of the features of MediaWiki. It originated out of a fork of the original JAMWiki project, that has regrettably discontinued active development and support in 2013.
+JamWiki2 is a Java-based wiki application that offers the same syntax as MediaWiki and many of its features. It originated out of a fork of the original JAMWiki project, that has regrettably discontinued active development and support in 2013.
 
 As far as we know, JamWiki2 today is the only Java-based wiki engine that can parse MediaWiki syntax (besides XWiki). It's easy to install, comfortable to use, and a joy to administrate.
 
