@@ -260,7 +260,7 @@ public final class Environment {
 		defaults.setProperty(PROP_BASE_INITIALIZED, BOOL_FALSE);
 		defaults.setProperty(PROP_BASE_LOGO_IMAGE, "logo.gif");
 		defaults.setProperty(PROP_BASE_SEARCH_ENGINE, SearchEngine.SEARCH_ENGINE_LUCENE);
-		defaults.setProperty(PROP_BASE_WIKI_VERSION, "0.0.0");
+		defaults.setProperty(PROP_BASE_WIKI_VERSION, "2.0.0");
 		defaults.setProperty(PROP_DBCP_MAX_ACTIVE, "15");
 		defaults.setProperty(PROP_DBCP_MAX_IDLE, "15");
 		defaults.setProperty(PROP_DBCP_MAX_OPEN_PREPARED_STATEMENTS, "20");
