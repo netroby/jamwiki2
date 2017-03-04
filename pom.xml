@@ -374,6 +374,11 @@
                 <version>2.0</version>
                 <!-- See: http://www.mojohaus.org/jdepend-maven-plugin/ -->
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+            </plugin>
         </plugins>
     </build>
     <!-- FIXME merge versions and configs with pluginManagement if possible -->

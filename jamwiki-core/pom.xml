@@ -81,6 +81,11 @@
 			<artifactId>slf4j-simple</artifactId>
 			<scope>test</scope>
 		</dependency>
+	 <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>jamwiki-web</artifactId>
+	  <version>${project.version}</version>
+	 </dependency>
 	</dependencies>
     
 	<build>
@@ -131,7 +136,6 @@
 						<exclude>**/TestSearchEngine.java</exclude>
 					</excludes>
 				</configuration>
-			 <version>2.15</version>
 			</plugin>
 		</plugins>
 	</build>
