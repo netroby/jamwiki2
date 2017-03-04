@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Function;
 
 /**
  * The <code>Environment</code> class is instantiated as a singleton to
@@ -169,7 +170,7 @@ public final class Environment {
 		initDefaultProperties();
 		log.debug("Default properties initialized: " + defaults.toString());
         props = new SortedProperties(defaults);
-		props.putAll(loadProperties(PROPERTY_FILE_NAME));
+		props.putAll(loadProperties((filePath) -> findWikiPropertyFile(filePath), PROPERTY_FILE_NAME));
 		if ("true".equals(System.getProperty("jamwiki.override.file.properties"))) {
 			overrideFromSystemProperties();
 		}
@@ -438,10 +439,17 @@ public final class Environment {
 	 * @return The loaded SortedProperties object.
 	 */
 	public static SortedProperties loadProperties(String propertyFile) {
-		return loadProperties(propertyFile, null);
+		return loadProperties(propertyFile, new Properties());
 	}
 
-	/**
+	public static SortedProperties loadProperties(String propertyFile, Properties def) {
+		return loadProperties((filePath) -> findPropertyFile(filePath), propertyFile, def);
+	}
+
+    private static SortedProperties loadProperties(Function<String, File> fileFinder, String propertyFile) {
+        return loadProperties(fileFinder, propertyFile, new Properties());
+    }
+    /**
 	 * Given a property file name, load the property file and return an object
 	 * representing the property values.
 	 *
@@ -449,15 +457,12 @@ public final class Environment {
 	 * @param def Default property values, or <code>null</code> if there are no defaults.
 	 * @return The loaded SortedProperties object.
 	 */
-	public static SortedProperties loadProperties(String propertyFile, Properties def) {
-		SortedProperties properties = new SortedProperties();
-		if (def != null) {
-			properties = new SortedProperties(def);
-		}
-		File file = null;
+	private static SortedProperties loadProperties(Function<String, File> fileFinder, String propertyFile, Properties def) {
+		SortedProperties properties = new SortedProperties(def);
+		File file;
 		FileInputStream fis = null;
 		try {
-			file = findProperties(propertyFile);
+			file = fileFinder.apply(propertyFile);
 			if (file == null) {
 				log.warn("Property file " + propertyFile + " does not exist");
 			} else if (!file.exists()) {
@@ -467,37 +472,100 @@ public final class Environment {
 				fis = new FileInputStream(file);
 				properties.load(fis);
 			}
-		} catch (IOException e) {
-			log.error("Failure while trying to load properties file " + file.getPath(), e);
+		} catch (Exception e) {
+			log.error("Failure while trying to load wiki property file", e);
 		} finally {
 			IOUtils.closeQuietly(fis);
 		}
 		return properties;
 	}
-
+    
 	/**
-	 * Load a property file.  First check for the file in the path from which
-	 * the application was started, then check other classpath locations.
+	 * Find the initial wiki property file.
 	 *
-	 * @param filename The name of the property file to be loaded.  This name can be
-	 *  either absolute or relative; if relative then the file will be loaded from
-	 *  the class path or from the directory from which the JVM was loaded.
+	 * @param fileSpec The path of the property file to be loaded.  This path can be
+	 *  either absolute or relative to the directory from which the JVM was loaded.
 	 * @return A File object containing the properties file instance.
 	 * @throws IOException Thrown if the specified property file cannot
 	 *  be located.
 	 */
-	private static File findProperties(String filename) throws IOException {
-		// read in properties file
-		File file = new File(filename);
-		if (file.exists()) {
-			return file; //NOPMD
-		}
-		// search for file in class loader path
-		return retrievePropertyFile(filename);
+	private static File findWikiPropertyFile(String fileSpec) {
+
+		File propFile = new File(fileSpec);
+        
+        if (propFile.exists()) {
+            if (propFile.isFile() && propFile.canRead()) {
+                return propFile;  // absolute | relative, existing & accessible property file
+            } else {
+                throw new RuntimeException(String.format("Property file not accessible: %s", fileSpec));
+            }
+        }
+        // assert(!propFile.exists());
+        if (propFile.isAbsolute()) {
+            throw new RuntimeException(String.format("Property file not found: %s", fileSpec));
+        }
+        // assert(!propFile.exists() && !propFile.isAbsolute());
+        // non-existing relative property file:
+        // try default wiki properties path
+        propFile = new File("data", "jamwiki.properties");
+        
+        if (propFile.exists()) {
+            if (propFile.isFile() && propFile.canRead()) {
+                return propFile;
+            } else {
+                throw new RuntimeException(String.format("Property file not accessible: %s", fileSpec));
+            }
+        }
+                
+		//- DONT: search for file in class loader path
+		//- return retrievePropertyFile(fileSpec);
+        return null;
 	}
 
 	/**
-	 * Utility methods for retrieving property files from the class path, based on
+	 * Find a property file.
+	 *
+	 * @param fileSpec The path of the property file to be loaded.  This path can be
+	 *  either absolute or relative to the directory from which the JVM was loaded.
+	 * @return A File object containing the properties file instance.
+	 * @throws IOException Thrown if the specified property file cannot
+	 *  be located.
+	 */
+	private static File findPropertyFile(String fileSpec) {
+
+		File propFile = new File(fileSpec);
+        
+        if (propFile.exists()) {
+            if (propFile.isFile() && propFile.canRead()) {
+                return propFile;  // absolute | relative, existing & accessible property file
+            } else {
+                throw new RuntimeException(String.format("Property file not accessible: %s", fileSpec));
+            }
+        }
+        // assert(!propFile.exists());
+        if (propFile.isAbsolute()) {
+            throw new RuntimeException(String.format("Property file not found: %s", fileSpec));
+        }
+        // assert(!propFile.exists() && !propFile.isAbsolute());
+        // non-existing relative property file:
+        // try to find it in BASE_FILE_DIR before searching classpath
+        String fileName = propFile.getName();
+        propFile = new File(getValue(PROP_BASE_FILE_DIR), fileName);
+        
+        if (propFile.exists()) {
+            if (propFile.isFile() && propFile.canRead()) {
+                return propFile;
+            } else {
+                throw new RuntimeException(String.format("Property file not accessible: %s", fileSpec));
+            }
+        }
+                
+        // search for file in class loader path
+		return findClasspathPropertyFile(fileSpec);
+	}
+
+	/**
+	 * Find property file from the class path. Based on
 	 * code from the org.apache.log4j.helpers.Loader class.
 	 *
 	 * @param filename Given a filename return a File object for the file.  The filename
@@ -506,7 +574,7 @@ public final class Environment {
 	 * @return Returns a file representing the filename, or <code>null</code> if
 	 *  the file cannot be found.
 	 */
-	private static File retrievePropertyFile(String filename) {
+	private static File findClasspathPropertyFile(String filename) {
 		try {
 			return ResourceUtil.getClassLoaderFile(filename);
 		} catch (IOException e) {
@@ -521,12 +589,12 @@ public final class Environment {
 	}
 
 	/**
-	 * Persist the current wiki system configuration and reload all values.
+	 * Persist the current wiki configuration and reload all values.
 	 *
 	 */
 	public static void saveConfiguration() {
 		try {
-			saveProperties(PROPERTY_FILE_NAME, getInstance(), null);
+			saveWikiProperties(getInstance(), null);
 			// do not use WikiBase.getDataHandler() directly since properties are
 			// being changed
 			WikiBase.getDataHandler().writeConfiguration(propertiesToMap(getInstance()));
@@ -537,16 +605,19 @@ public final class Environment {
 	}
 
 	/**
-	 * Save the specified property values to the filesystem.
+	 * Save property values to file jamwiki.properties in the default location.
 	 *
-	 * @param propertyFile The name of the property file to save.
 	 * @param properties The properties object that is to be saved.
 	 * @param comments A comment to save in the properties file.
 	 * @throws IOException Thrown if the file cannot be found or if an I/O
 	 *  error occurs.
 	 */
-	public static void saveProperties(String propertyFile, Properties properties, String comments) throws IOException {
-		File file = findProperties(propertyFile);
+	private static void saveWikiProperties(Properties properties, String comments) throws IOException {
+		File file = new File(getValue(PROP_BASE_FILE_DIR), "jamwiki.properties");
+        storeProperties(file, properties, comments);
+	}
+    
+    private static void storeProperties(File file, Properties properties, String comments) throws IOException {
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(file);
@@ -554,7 +625,21 @@ public final class Environment {
 		} finally {
 			IOUtils.closeQuietly(out);
 		}
-	}
+    }
+    
+	/**
+	 * * Save property values to the specified file.
+	 *
+     * @param propertyFile The name of the property file to save.
+     * @param properties The properties object that is to be saved.
+	 * @param comments A comment to save in the properties file.
+	 * @throws IOException Thrown if the file cannot be found or if an I/O
+	 *  error occurs.
+	 */
+    public static void saveProperties(String propertyFile, Properties properties, String comments) throws IOException {
+        File file = findPropertyFile(propertyFile);
+		storeProperties(file, properties, comments);
+    }
 
 	/**
 	 * Set a new boolean value for the given property name.
