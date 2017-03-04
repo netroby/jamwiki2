@@ -27,7 +27,11 @@ import static org.junit.Assert.*;
  *
  */
 public class InterwikiTest extends JAMWikiUnitTest {
-
+    
+    public InterwikiTest() {
+        super();
+    }
+    
 	/**
 	 *
 	 */

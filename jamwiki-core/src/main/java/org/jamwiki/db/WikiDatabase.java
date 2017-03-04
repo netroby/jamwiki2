@@ -617,7 +617,7 @@ public class WikiDatabase {
 			logger.warn("Admin user already exists");
 		}
 		WikiBase.getDataHandler().writeWikiUser(user, username, encryptedPassword);
-		List<String> roles = new ArrayList<String>();
+		List<String> roles = new ArrayList<>();
 		roles.add(Role.ROLE_ADMIN.getAuthority());
 		roles.add(Role.ROLE_IMPORT.getAuthority());
 		roles.add(Role.ROLE_SYSADMIN.getAuthority());

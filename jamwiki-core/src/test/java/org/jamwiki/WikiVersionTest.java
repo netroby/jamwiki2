@@ -23,6 +23,10 @@ import static org.junit.Assert.*;
 
 public class WikiVersionTest extends JAMWikiUnitTest {
 
+    public WikiVersionTest() {
+        super();
+    }
+
 	/**
 	 *
 	 */

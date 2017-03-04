@@ -54,13 +54,16 @@ public class MigrationUtilTest extends JAMWikiUnitTest {
 	public TemporaryFolder TEMP_FOLDER = new TemporaryFolder();
 
 	private static boolean INITIALIZED = false;
+    
+    public MigrationUtilTest() {
+        super();
+    }
 
 	/**
 	 *
 	 */
 	@Before
 	public void setup() throws Exception {
-		super.setup();
 		if (!INITIALIZED) {
 			this.setupTopic(null, "CharacterUtf8");
 			this.setupTopic(null, "Example1");
@@ -75,7 +78,7 @@ public class MigrationUtilTest extends JAMWikiUnitTest {
 	@Test
 	public void testExportNonExistentTopic() throws Throwable {
 		String virtualWiki = VIRTUAL_WIKI_EN;
-		List<String> topicNames = new ArrayList<String>();
+		List<String> topicNames = new ArrayList<>();
 		topicNames.add("Bogus Topic Name");
 		boolean excludeHistory = false;
 		File file = TEMP_FOLDER.newFile("export.xml");
@@ -97,7 +100,7 @@ public class MigrationUtilTest extends JAMWikiUnitTest {
 	@Test
 	public void testExportTwoTopics() throws Throwable {
 		String virtualWiki = VIRTUAL_WIKI_EN;
-		List<String> topicNames = new ArrayList<String>();
+		List<String> topicNames = new ArrayList<>();
 		topicNames.add("Example1");
 		topicNames.add("Example2");
 		boolean excludeHistory = false;
@@ -115,7 +118,7 @@ public class MigrationUtilTest extends JAMWikiUnitTest {
 	@Test
 	public void testExportUtf8() throws Throwable {
 		String virtualWiki = VIRTUAL_WIKI_EN;
-		List<String> topicNames = new ArrayList<String>();
+		List<String> topicNames = new ArrayList<>();
 		topicNames.add("CharacterUtf8");
 		boolean excludeHistory = false;
 		File file = TEMP_FOLDER.newFile("export.xml");
@@ -141,9 +144,9 @@ public class MigrationUtilTest extends JAMWikiUnitTest {
 		Topic topic1 = WikiBase.getDataHandler().lookupTopic(virtualWiki, TOPIC_NAME1, false);
 		// validate that the parsed topic correctly set topic values
 		assertEquals("Topic name '" + TOPIC_NAME1 + "' set correctly", TOPIC_NAME1, topic1.getName());
-		assertTrue("Topic content set correctly", topic1.getTopicContent().indexOf("Link to user page: [[User:Test User]]") != -1);
+		assertTrue("Topic content set correctly", topic1.getTopicContent().contains("Link to user page: [[User:Test User]]"));
 		// validate that namespaces were converted from Mediawiki to JAMWiki correctly
-		assertTrue("Topic content namespaces updated correctly", topic1.getTopicContent().indexOf("Link to user talk page: [[User comments: Test User]]") != -1);
+		assertTrue("Topic content namespaces updated correctly", topic1.getTopicContent().contains("Link to user talk page: [[User comments: Test User]]"));
 		// validate that the second topic parsed
 		assertTrue("Parsed topic '" + TOPIC_NAME2 + "'", results.contains(TOPIC_NAME2));
 		Topic topic2 = WikiBase.getDataHandler().lookupTopic(virtualWiki, TOPIC_NAME2, false);
@@ -188,24 +191,24 @@ public class MigrationUtilTest extends JAMWikiUnitTest {
 		Topic topic = WikiBase.getDataHandler().lookupTopic(virtualWiki, TOPIC_NAME5, false);
 		assertNotNull("Namespace test topic imported correctly", topic);
 		// verify that Mediawiki namespaces were correctly converted to JAMWiki namespaces
-		assertTrue("Talk:Test", (topic.getTopicContent().indexOf("Talk:Test - [[Comments:Test]]") != -1));
-		assertTrue("User:Test", (topic.getTopicContent().indexOf("User:Test - [[User:Test]]") != -1));
-		assertTrue("User talk:Test", (topic.getTopicContent().indexOf("User talk:Test - [[User comments:Test]]") != -1));
-		assertTrue("Wikipedia:Test", (topic.getTopicContent().indexOf("Wikipedia:Test - [[Project:Test]]") != -1));
-		assertTrue("Wikipedia talk:Test", (topic.getTopicContent().indexOf("Wikipedia talk:Test - [[Project comments:Test]]") != -1));
-		assertTrue("File:Test", (topic.getTopicContent().indexOf("File:Test - [[File:Test]]") != -1));
-		assertTrue("File talk:Test", (topic.getTopicContent().indexOf("File talk:Test - [[File comments:Test]]") != -1));
-		assertTrue("Template:Test", (topic.getTopicContent().indexOf("Template:Test - [[Template:Test]]") != -1));
-		assertTrue("Template talk:Test", (topic.getTopicContent().indexOf("Template talk:Test - [[Template comments:Test]]") != -1));
-		assertTrue("Category:Test", (topic.getTopicContent().indexOf("Category:Test - [[Category:Test]]") != -1));
-		assertTrue("Category talk:Test", (topic.getTopicContent().indexOf("Category talk:Test - [[Category comments:Test]]") != -1));
-		assertTrue("Custom:Test", (topic.getTopicContent().indexOf("Custom:Test - [[Custom:Test]]") != -1));
-		assertTrue("Custom talk:Test", (topic.getTopicContent().indexOf("Custom talk:Test - [[Custom talk:Test]]") != -1));
-		assertTrue("Pattern test", (topic.getTopicContent().indexOf("Pattern test - [[  User comments:Test ]]") != -1));
-		assertTrue("Case-sensitive test", (topic.getTopicContent().indexOf("Case-sensitive test - [[ User comments:Test]]") != -1));
-		assertTrue("Inclusion test", (topic.getTopicContent().indexOf("Inclusion test - [[:User comments:Test]]") != -1));
-		assertTrue("Template inclusion test 1", (topic.getTopicContent().indexOf("Template inclusion test 1 - {{User comments:Test}}") != -1));
-		assertTrue("Template inclusion test 2", (topic.getTopicContent().indexOf("Template inclusion test 2 - {{:User comments:Test}}") != -1));
+		assertTrue("Talk:Test", (topic.getTopicContent().contains("Talk:Test - [[Comments:Test]]")));
+		assertTrue("User:Test", (topic.getTopicContent().contains("User:Test - [[User:Test]]")));
+		assertTrue("User talk:Test", (topic.getTopicContent().contains("User talk:Test - [[User comments:Test]]")));
+		assertTrue("Wikipedia:Test", (topic.getTopicContent().contains("Wikipedia:Test - [[Project:Test]]")));
+		assertTrue("Wikipedia talk:Test", (topic.getTopicContent().contains("Wikipedia talk:Test - [[Project comments:Test]]")));
+		assertTrue("File:Test", (topic.getTopicContent().contains("File:Test - [[File:Test]]")));
+		assertTrue("File talk:Test", (topic.getTopicContent().contains("File talk:Test - [[File comments:Test]]")));
+		assertTrue("Template:Test", (topic.getTopicContent().contains("Template:Test - [[Template:Test]]")));
+		assertTrue("Template talk:Test", (topic.getTopicContent().contains("Template talk:Test - [[Template comments:Test]]")));
+		assertTrue("Category:Test", (topic.getTopicContent().contains("Category:Test - [[Category:Test]]")));
+		assertTrue("Category talk:Test", (topic.getTopicContent().contains("Category talk:Test - [[Category comments:Test]]")));
+		assertTrue("Custom:Test", (topic.getTopicContent().contains("Custom:Test - [[Custom:Test]]")));
+		assertTrue("Custom talk:Test", (topic.getTopicContent().contains("Custom talk:Test - [[Custom talk:Test]]")));
+		assertTrue("Pattern test", (topic.getTopicContent().contains("Pattern test - [[  User comments:Test ]]")));
+		assertTrue("Case-sensitive test", (topic.getTopicContent().contains("Case-sensitive test - [[ User comments:Test]]")));
+		assertTrue("Inclusion test", (topic.getTopicContent().contains("Inclusion test - [[:User comments:Test]]")));
+		assertTrue("Template inclusion test 1", (topic.getTopicContent().contains("Template inclusion test 1 - {{User comments:Test}}")));
+		assertTrue("Template inclusion test 2", (topic.getTopicContent().contains("Template inclusion test 2 - {{:User comments:Test}}")));
 	}
 
 	/**

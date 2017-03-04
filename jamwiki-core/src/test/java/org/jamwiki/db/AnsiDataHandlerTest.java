@@ -32,6 +32,10 @@ import static org.junit.Assert.*;
  * Tests for data handler functionality.
  */
 public class AnsiDataHandlerTest extends JAMWikiUnitTest {
+    
+    public AnsiDataHandlerTest() {
+        super();
+    }
 
 	/**
 	 *
