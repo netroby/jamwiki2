@@ -232,9 +232,11 @@ public class DatabaseConnection {
 		if (dataSource != null) {
 			closeConnectionPool(); // DataSource has already been created so remove it
 		}
-		String url = Environment.getValue(Environment.PROP_DB_URL);
 		DataSource targetDataSource = null;
-		if (url.startsWith("jdbc:")) {
+		String url = Environment.getValue(Environment.PROP_DB_URL);
+        if (StringUtils.isBlank(url)) {
+            throw new SQLException("Database URL not initialized.");
+        } else if (url.startsWith("jdbc:")) {
 			try {
 				// Use an internal "LocalDataSource" configured from the Environment
 				targetDataSource = new LocalDataSource();
