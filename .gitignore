@@ -1,8 +1,8 @@
 target/
-.projectKnowledge/
 .idea/
+.projectKnowledge/
+nbproject/
 nb-configuration.xml
 nbactions.xml
 *.bat
 *.iml
-
