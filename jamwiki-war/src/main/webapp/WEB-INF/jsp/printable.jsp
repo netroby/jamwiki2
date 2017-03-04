@@ -36,13 +36,11 @@
 	<link rel="home" title="<c:out value="${defaultTopic}" />" href="<jamwiki:link value="${defaultTopic}" />" />
 </c:if>
 	<link href="<jamwiki:link value="jamwiki.css" />" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </head>
 <body style="background:none">
-
 <h1 id="contents-header"><jamwiki_t:wikiMessage message="${pageInfo.pageTitle}" /></h1>
-
 <%@ include file="view-topic-include.jsp" %>
 <%@ include file="view-category-include.jsp" %>
-
 </body>
 </html>
