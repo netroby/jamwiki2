@@ -423,6 +423,13 @@ public final class Environment {
 		return getBooleanValue(Environment.PROP_BASE_INITIALIZED);
 	}
     
+    /**
+     * Declare the wiki properties as initialized.
+     */
+    protected static void setInitialized() {
+        setBooleanValue(Environment.PROP_BASE_INITIALIZED, true);
+    }
+    
 	/**
 	 * Given a property file name, load the property file and return an object
 	 * representing the property values.
