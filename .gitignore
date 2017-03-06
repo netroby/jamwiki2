@@ -2,6 +2,7 @@ target/
 .idea/
 .projectKnowledge/
 nbproject/
+temp/
 nb-configuration.xml
 nbactions.xml
 *.bat
